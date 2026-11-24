@@ -1,0 +1,314 @@
+{
+ "lite_A:A1_filter_out": {
+  "a_common_scorable_tasks": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 205,
+    "positives": 110,
+    "auroc_a": 0.7182,
+    "auroc_b": 0.7179,
+    "difference": 0.0003,
+    "difference_ci95": [
+     -0.0375,
+     0.0381
+    ],
+    "equivalent_within_0.05": true
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 205,
+    "positives": 110,
+    "auroc_a": 0.7044,
+    "auroc_b": 0.7179,
+    "difference": -0.0135,
+    "difference_ci95": [
+     -0.073,
+     0.0453
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 205,
+    "positives": 110,
+    "auroc_a": 0.7135,
+    "auroc_b": 0.7179,
+    "difference": -0.0044,
+    "difference_ci95": [
+     -0.0573,
+     0.0523
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 205,
+    "positives": 110,
+    "auroc_a": 0.7168,
+    "auroc_b": 0.7179,
+    "difference": -0.0011,
+    "difference_ci95": [
+     -0.0522,
+     0.0477
+    ],
+    "equivalent_within_0.05": false
+   }
+  },
+  "b_all_tasks_dropped_not_flagged": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 231,
+    "positives": 133,
+    "auroc_a": 0.6038,
+    "auroc_b": 0.7459,
+    "difference": -0.1421,
+    "difference_ci95": [
+     -0.2203,
+     -0.0619
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 231,
+    "positives": 133,
+    "auroc_a": 0.5927,
+    "auroc_b": 0.7459,
+    "difference": -0.1532,
+    "difference_ci95": [
+     -0.2377,
+     -0.0677
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 231,
+    "positives": 133,
+    "auroc_a": 0.6,
+    "auroc_b": 0.7459,
+    "difference": -0.1458,
+    "difference_ci95": [
+     -0.2317,
+     -0.0619
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 231,
+    "positives": 133,
+    "auroc_a": 0.6027,
+    "auroc_b": 0.7459,
+    "difference": -0.1432,
+    "difference_ci95": [
+     -0.2247,
+     -0.0557
+    ],
+    "equivalent_within_0.05": false
+   }
+  },
+  "dropped_tasks": 26,
+  "defective_share_among_dropped": 0.8846
+ },
+ "test_A:A1_filter_out": {
+  "a_common_scorable_tasks": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 1056,
+    "positives": 586,
+    "auroc_a": 0.6888,
+    "auroc_b": 0.6747,
+    "difference": 0.0141,
+    "difference_ci95": [
+     -0.0058,
+     0.0336
+    ],
+    "equivalent_within_0.05": true
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 1056,
+    "positives": 586,
+    "auroc_a": 0.6359,
+    "auroc_b": 0.6747,
+    "difference": -0.0388,
+    "difference_ci95": [
+     -0.0773,
+     -0.0008
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 1056,
+    "positives": 586,
+    "auroc_a": 0.6627,
+    "auroc_b": 0.6747,
+    "difference": -0.012,
+    "difference_ci95": [
+     -0.0448,
+     0.0228
+    ],
+    "equivalent_within_0.05": true
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 1056,
+    "positives": 586,
+    "auroc_a": 0.6731,
+    "auroc_b": 0.6747,
+    "difference": -0.0016,
+    "difference_ci95": [
+     -0.0327,
+     0.0285
+    ],
+    "equivalent_within_0.05": true
+   }
+  },
+  "b_all_tasks_dropped_not_flagged": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 1699,
+    "positives": 1160,
+    "auroc_a": 0.3998,
+    "auroc_b": 0.7604,
+    "difference": -0.3606,
+    "difference_ci95": [
+     -0.4007,
+     -0.3188
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 1699,
+    "positives": 1160,
+    "auroc_a": 0.3765,
+    "auroc_b": 0.7604,
+    "difference": -0.3839,
+    "difference_ci95": [
+     -0.4279,
+     -0.3386
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 1699,
+    "positives": 1160,
+    "auroc_a": 0.3883,
+    "auroc_b": 0.7604,
+    "difference": -0.3721,
+    "difference_ci95": [
+     -0.4131,
+     -0.3331
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 1699,
+    "positives": 1160,
+    "auroc_a": 0.3928,
+    "auroc_b": 0.7604,
+    "difference": -0.3675,
+    "difference_ci95": [
+     -0.4087,
+     -0.3244
+    ],
+    "equivalent_within_0.05": false
+   }
+  },
+  "dropped_tasks": 643,
+  "defective_share_among_dropped": 0.8927
+ },
+ "lite_B:B3_not_enough_or_misleading": {
+  "a_common_scorable_tasks": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 265,
+    "positives": 29,
+    "auroc_a": 0.777,
+    "auroc_b": 0.8153,
+    "difference": -0.0384,
+    "difference_ci95": [
+     -0.0796,
+     -0.0001
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 265,
+    "positives": 29,
+    "auroc_a": 0.7707,
+    "auroc_b": 0.8153,
+    "difference": -0.0446,
+    "difference_ci95": [
+     -0.1042,
+     0.0087
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 265,
+    "positives": 29,
+    "auroc_a": 0.7864,
+    "auroc_b": 0.8153,
+    "difference": -0.0289,
+    "difference_ci95": [
+     -0.0809,
+     0.021
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 265,
+    "positives": 29,
+    "auroc_a": 0.7788,
+    "auroc_b": 0.8153,
+    "difference": -0.0365,
+    "difference_ci95": [
+     -0.0855,
+     0.0085
+    ],
+    "equivalent_within_0.05": false
+   }
+  },
+  "b_all_tasks_dropped_not_flagged": {
+   "low_tetrachoric minus low_pass_rate": {
+    "n": 300,
+    "positives": 38,
+    "auroc_a": 0.6216,
+    "auroc_b": 0.7856,
+    "difference": -0.164,
+    "difference_ci95": [
+     -0.3091,
+     -0.0307
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_scalability minus low_pass_rate": {
+    "n": 300,
+    "positives": 38,
+    "auroc_a": 0.6173,
+    "auroc_b": 0.7856,
+    "difference": -0.1683,
+    "difference_ci95": [
+     -0.3126,
+     -0.0301
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_item_total minus low_pass_rate": {
+    "n": 300,
+    "positives": 38,
+    "auroc_a": 0.6281,
+    "auroc_b": 0.7856,
+    "difference": -0.1575,
+    "difference_ci95": [
+     -0.2988,
+     -0.0232
+    ],
+    "equivalent_within_0.05": false
+   },
+   "low_ensemble minus low_pass_rate": {
+    "n": 300,
+    "positives": 38,
+    "auroc_a": 0.6228,
+    "auroc_b": 0.7856,
+    "difference": -0.1627,
+    "difference_ci95": [
+     -0.3016,
+     -0.0308
+    ],
+    "equivalent_within_0.05": false
+   }
+  },
+  "dropped_tasks": 35,
+  "defective_share_among_dropped": 0.2571
+ }
+}

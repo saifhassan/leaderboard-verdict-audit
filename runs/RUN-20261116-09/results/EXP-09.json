@@ -1,0 +1,138 @@
+{
+ "positives": 26,
+ "tasks": 500,
+ "mean_pass_rate_pos": 0.6848,
+ "mean_pass_rate_neg": 0.5054,
+ "detectors": {
+  "low_pass_rate": {
+   "n": 500,
+   "auroc": 0.3387,
+   "auroc_ci95": [
+    0.252,
+    0.4298
+   ],
+   "pass_rate_matched_auroc": 0.5033,
+   "pass_rate_matched_ci95": [
+    0.4571,
+    0.5497
+   ]
+  },
+  "high_pass_rate": {
+   "n": 500,
+   "auroc": 0.6613,
+   "auroc_ci95": [
+    0.5693,
+    0.7528
+   ],
+   "pass_rate_matched_auroc": 0.4967,
+   "pass_rate_matched_ci95": [
+    0.4504,
+    0.5414
+   ]
+  },
+  "low_tetrachoric": {
+   "n": 468,
+   "auroc": 0.4187,
+   "auroc_ci95": [
+    0.3127,
+    0.5353
+   ],
+   "pass_rate_matched_auroc": 0.5472,
+   "pass_rate_matched_ci95": [
+    0.4305,
+    0.66
+   ]
+  },
+  "low_scalability": {
+   "n": 468,
+   "auroc": 0.4656,
+   "auroc_ci95": [
+    0.3761,
+    0.5526
+   ],
+   "pass_rate_matched_auroc": 0.5662,
+   "pass_rate_matched_ci95": [
+    0.4627,
+    0.6686
+   ]
+  },
+  "low_item_total": {
+   "n": 468,
+   "auroc": 0.4669,
+   "auroc_ci95": [
+    0.3788,
+    0.5487
+   ],
+   "pass_rate_matched_auroc": 0.5574,
+   "pass_rate_matched_ci95": [
+    0.4399,
+    0.6658
+   ]
+  },
+  "low_ensemble": {
+   "n": 468,
+   "auroc": 0.4652,
+   "auroc_ci95": [
+    0.3723,
+    0.5607
+   ],
+   "pass_rate_matched_auroc": 0.556,
+   "pass_rate_matched_ci95": [
+    0.4458,
+    0.6753
+   ]
+  },
+  "low_point_biserial": {
+   "n": 468,
+   "auroc": 0.4674,
+   "auroc_ci95": [
+    0.3845,
+    0.5537
+   ],
+   "pass_rate_matched_auroc": 0.5574,
+   "pass_rate_matched_ci95": [
+    0.4542,
+    0.6645
+   ]
+  },
+  "low_discrimination_2pl": {
+   "n": 500,
+   "auroc": 0.6052,
+   "auroc_ci95": [
+    0.4971,
+    0.7026
+   ],
+   "pass_rate_matched_auroc": 0.5677,
+   "pass_rate_matched_ci95": [
+    0.4567,
+    0.6738
+   ]
+  },
+  "high_rasch_outfit": {
+   "n": 500,
+   "auroc": 0.5645,
+   "auroc_ci95": [
+    0.4554,
+    0.6763
+   ],
+   "pass_rate_matched_auroc": 0.5545,
+   "pass_rate_matched_ci95": [
+    0.4525,
+    0.6612
+   ]
+  },
+  "high_rasch_infit": {
+   "n": 500,
+   "auroc": 0.596,
+   "auroc_ci95": [
+    0.4899,
+    0.7052
+   ],
+   "pass_rate_matched_auroc": 0.5816,
+   "pass_rate_matched_ci95": [
+    0.4782,
+    0.6897
+   ]
+  }
+ }
+}

@@ -1,0 +1,168 @@
+{
+ "lite_A:A1_filter_out": {
+  "per_repository": {
+   "astropy__astropy": {
+    "n": 5,
+    "positives": 1,
+    "mean_pass_rate": 0.3714,
+    "auroc": 0.5
+   },
+   "django__django": {
+    "n": 90,
+    "positives": 44,
+    "mean_pass_rate": 0.4087,
+    "auroc": 0.7352
+   },
+   "matplotlib__matplotlib": {
+    "n": 19,
+    "positives": 12,
+    "mean_pass_rate": 0.2995,
+    "auroc": 0.6071
+   },
+   "mwaskom__seaborn": {
+    "n": 3,
+    "positives": 3,
+    "mean_pass_rate": 0.5119,
+    "auroc": null
+   },
+   "psf__requests": {
+    "n": 5,
+    "positives": 4,
+    "mean_pass_rate": 0.5214,
+    "auroc": 1.0
+   },
+   "pydata__xarray": {
+    "n": 3,
+    "positives": 2,
+    "mean_pass_rate": 0.3333,
+    "auroc": 0.5
+   },
+   "pylint-dev__pylint": {
+    "n": 5,
+    "positives": 4,
+    "mean_pass_rate": 0.2405,
+    "auroc": 0.5
+   },
+   "pytest-dev__pytest": {
+    "n": 9,
+    "positives": 6,
+    "mean_pass_rate": 0.3095,
+    "auroc": 0.8333
+   },
+   "scikit-learn__scikit-learn": {
+    "n": 17,
+    "positives": 7,
+    "mean_pass_rate": 0.4405,
+    "auroc": 0.8
+   },
+   "sphinx-doc__sphinx": {
+    "n": 12,
+    "positives": 9,
+    "mean_pass_rate": 0.1964,
+    "auroc": 0.8704
+   },
+   "sympy__sympy": {
+    "n": 63,
+    "positives": 41,
+    "mean_pass_rate": 0.2356,
+    "auroc": 0.7916
+   }
+  },
+  "repository_stratified_auroc": 0.7507,
+  "pooled_auroc": 0.7459,
+  "pooled_auroc_ci95_repository_cluster_bootstrap": [
+   0.6451,
+   0.7844
+  ],
+  "pooled_auroc_ci95_task_bootstrap": [
+   0.6824,
+   0.8053
+  ]
+ },
+ "test_A:A1_filter_out": {
+  "per_repository": {
+   "astropy__astropy": {
+    "n": 72,
+    "positives": 50,
+    "mean_pass_rate": 0.1794,
+    "auroc": 0.7009
+   },
+   "django__django": {
+    "n": 652,
+    "positives": 403,
+    "mean_pass_rate": 0.242,
+    "auroc": 0.7448
+   },
+   "matplotlib__matplotlib": {
+    "n": 125,
+    "positives": 87,
+    "mean_pass_rate": 0.1813,
+    "auroc": 0.6904
+   },
+   "mwaskom__seaborn": {
+    "n": 9,
+    "positives": 7,
+    "mean_pass_rate": 0.2269,
+    "auroc": 0.2857
+   },
+   "pallets__flask": {
+    "n": 1,
+    "positives": 0,
+    "mean_pass_rate": 0.625,
+    "auroc": null
+   },
+   "psf__requests": {
+    "n": 33,
+    "positives": 24,
+    "mean_pass_rate": 0.327,
+    "auroc": 0.5833
+   },
+   "pydata__xarray": {
+    "n": 79,
+    "positives": 55,
+    "mean_pass_rate": 0.1719,
+    "auroc": 0.814
+   },
+   "pylint-dev__pylint": {
+    "n": 37,
+    "positives": 27,
+    "mean_pass_rate": 0.1059,
+    "auroc": 0.6981
+   },
+   "pytest-dev__pytest": {
+    "n": 89,
+    "positives": 67,
+    "mean_pass_rate": 0.1859,
+    "auroc": 0.8328
+   },
+   "scikit-learn__scikit-learn": {
+    "n": 165,
+    "positives": 130,
+    "mean_pass_rate": 0.1934,
+    "auroc": 0.8934
+   },
+   "sphinx-doc__sphinx": {
+    "n": 139,
+    "positives": 93,
+    "mean_pass_rate": 0.1343,
+    "auroc": 0.7145
+   },
+   "sympy__sympy": {
+    "n": 298,
+    "positives": 217,
+    "mean_pass_rate": 0.1559,
+    "auroc": 0.7972
+   }
+  },
+  "repository_stratified_auroc": 0.7552,
+  "pooled_auroc": 0.7604,
+  "pooled_auroc_ci95_repository_cluster_bootstrap": [
+   0.718,
+   0.7971
+  ],
+  "pooled_auroc_ci95_task_bootstrap": [
+   0.7363,
+   0.7835
+  ]
+ }
+}

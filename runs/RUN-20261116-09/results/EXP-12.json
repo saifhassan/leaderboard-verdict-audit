@@ -1,0 +1,939 @@
+{
+ "agents": 14,
+ "tasks": 730,
+ "zero_variance": 251,
+ "labels": {
+  "D1_dropped": {
+   "positives": 89,
+   "low_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 89,
+    "base_rate": 0.1219,
+    "auroc": 0.5479,
+    "precision_at_50": 0.18,
+    "sensitivity_at_50": 0.1011,
+    "precision_at_73": 0.1644,
+    "sensitivity_at_73": 0.1348,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4877,
+     0.6046
+    ],
+    "precision_at_50_ci95": [
+     0.54,
+     0.9
+    ],
+    "precision_at_73_ci95": [
+     0.3699,
+     0.6164
+    ]
+   },
+   "high_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 89,
+    "base_rate": 0.1219,
+    "auroc": 0.4521,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.0225,
+    "precision_at_73": 0.0548,
+    "sensitivity_at_73": 0.0449,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.3908,
+     0.5124
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.14
+    ],
+    "precision_at_73_ci95": [
+     0.0137,
+     0.1233
+    ]
+   },
+   "low_tetrachoric | scorable tasks": {
+    "n": 479,
+    "positives": 53,
+    "base_rate": 0.1106,
+    "auroc": 0.4519,
+    "precision_at_48": 0.1042,
+    "sensitivity_at_48": 0.0943,
+    "precision_at_50": 0.1,
+    "sensitivity_at_50": 0.0943,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3665,
+     0.5393
+    ],
+    "precision_at_48_ci95": [
+     0.0208,
+     0.2083
+    ],
+    "precision_at_50_ci95": [
+     0.04,
+     0.2
+    ]
+   },
+   "low_scalability | scorable tasks": {
+    "n": 479,
+    "positives": 53,
+    "base_rate": 0.1106,
+    "auroc": 0.4375,
+    "precision_at_48": 0.0833,
+    "sensitivity_at_48": 0.0755,
+    "precision_at_50": 0.08,
+    "sensitivity_at_50": 0.0755,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3505,
+     0.5274
+    ],
+    "precision_at_48_ci95": [
+     0.0208,
+     0.1667
+    ],
+    "precision_at_50_ci95": [
+     0.02,
+     0.18
+    ]
+   },
+   "low_item_total | scorable tasks": {
+    "n": 479,
+    "positives": 53,
+    "base_rate": 0.1106,
+    "auroc": 0.4391,
+    "precision_at_48": 0.0833,
+    "sensitivity_at_48": 0.0755,
+    "precision_at_50": 0.08,
+    "sensitivity_at_50": 0.0755,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3543,
+     0.5276
+    ],
+    "precision_at_48_ci95": [
+     0.0208,
+     0.1875
+    ],
+    "precision_at_50_ci95": [
+     0.02,
+     0.18
+    ]
+   },
+   "low_ensemble | scorable tasks": {
+    "n": 479,
+    "positives": 53,
+    "base_rate": 0.1106,
+    "auroc": 0.4406,
+    "precision_at_48": 0.1042,
+    "sensitivity_at_48": 0.0943,
+    "precision_at_50": 0.1,
+    "sensitivity_at_50": 0.0943,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3522,
+     0.526
+    ],
+    "precision_at_48_ci95": [
+     0.0208,
+     0.1875
+    ],
+    "precision_at_50_ci95": [
+     0.04,
+     0.1805
+    ]
+   },
+   "low_point_biserial | scorable tasks": {
+    "n": 479,
+    "positives": 53,
+    "base_rate": 0.1106,
+    "auroc": 0.4389,
+    "precision_at_48": 0.0833,
+    "sensitivity_at_48": 0.0755,
+    "precision_at_50": 0.08,
+    "sensitivity_at_50": 0.0755,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3506,
+     0.5253
+    ],
+    "precision_at_48_ci95": [
+     0.0208,
+     0.1667
+    ],
+    "precision_at_50_ci95": [
+     0.02,
+     0.18
+    ]
+   },
+   "low_discrimination_2pl | all tasks": {
+    "n": 730,
+    "positives": 89,
+    "base_rate": 0.1219,
+    "auroc": 0.4404,
+    "precision_at_50": 0.06,
+    "sensitivity_at_50": 0.0337,
+    "precision_at_73": 0.1233,
+    "sensitivity_at_73": 0.1011,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.3769,
+     0.5033
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.14
+    ],
+    "precision_at_73_ci95": [
+     0.0411,
+     0.1781
+    ]
+   },
+   "high_rasch_outfit | all tasks": {
+    "n": 730,
+    "positives": 89,
+    "base_rate": 0.1219,
+    "auroc": 0.4555,
+    "precision_at_50": 0.1,
+    "sensitivity_at_50": 0.0562,
+    "precision_at_73": 0.0822,
+    "sensitivity_at_73": 0.0674,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.3957,
+     0.5156
+    ],
+    "precision_at_50_ci95": [
+     0.04,
+     0.2
+    ],
+    "precision_at_73_ci95": [
+     0.0411,
+     0.1644
+    ]
+   },
+   "high_rasch_infit | all tasks": {
+    "n": 730,
+    "positives": 89,
+    "base_rate": 0.1219,
+    "auroc": 0.4489,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.0225,
+    "precision_at_73": 0.0959,
+    "sensitivity_at_73": 0.0787,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.388,
+     0.5112
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.12
+    ],
+    "precision_at_73_ci95": [
+     0.0274,
+     0.1507
+    ]
+   }
+  },
+  "D2_test_patch_revised": {
+   "positives": 214,
+   "low_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 214,
+    "base_rate": 0.2932,
+    "auroc": 0.54,
+    "precision_at_50": 0.36,
+    "sensitivity_at_50": 0.0841,
+    "precision_at_73": 0.4521,
+    "sensitivity_at_73": 0.1542,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.494,
+     0.5833
+    ],
+    "precision_at_50_ci95": [
+     1.0,
+     1.0
+    ],
+    "precision_at_73_ci95": [
+     0.9863,
+     1.0
+    ]
+   },
+   "high_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 214,
+    "base_rate": 0.2932,
+    "auroc": 0.46,
+    "precision_at_50": 0.22,
+    "sensitivity_at_50": 0.0514,
+    "precision_at_73": 0.2466,
+    "sensitivity_at_73": 0.0841,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4173,
+     0.5045
+    ],
+    "precision_at_50_ci95": [
+     0.16,
+     0.44
+    ],
+    "precision_at_73_ci95": [
+     0.1781,
+     0.3973
+    ]
+   },
+   "low_tetrachoric | scorable tasks": {
+    "n": 479,
+    "positives": 128,
+    "base_rate": 0.2672,
+    "auroc": 0.4851,
+    "precision_at_48": 0.2083,
+    "sensitivity_at_48": 0.0781,
+    "precision_at_50": 0.22,
+    "sensitivity_at_50": 0.0859,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4279,
+     0.542
+    ],
+    "precision_at_48_ci95": [
+     0.125,
+     0.3333
+    ],
+    "precision_at_50_ci95": [
+     0.12,
+     0.34
+    ]
+   },
+   "low_scalability | scorable tasks": {
+    "n": 479,
+    "positives": 128,
+    "base_rate": 0.2672,
+    "auroc": 0.5243,
+    "precision_at_48": 0.2292,
+    "sensitivity_at_48": 0.0859,
+    "precision_at_50": 0.22,
+    "sensitivity_at_50": 0.0859,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4705,
+     0.5787
+    ],
+    "precision_at_48_ci95": [
+     0.125,
+     0.3542
+    ],
+    "precision_at_50_ci95": [
+     0.12,
+     0.36
+    ]
+   },
+   "low_item_total | scorable tasks": {
+    "n": 479,
+    "positives": 128,
+    "base_rate": 0.2672,
+    "auroc": 0.523,
+    "precision_at_48": 0.2292,
+    "sensitivity_at_48": 0.0859,
+    "precision_at_50": 0.22,
+    "sensitivity_at_50": 0.0859,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4668,
+     0.5781
+    ],
+    "precision_at_48_ci95": [
+     0.125,
+     0.3542
+    ],
+    "precision_at_50_ci95": [
+     0.1395,
+     0.36
+    ]
+   },
+   "low_ensemble | scorable tasks": {
+    "n": 479,
+    "positives": 128,
+    "base_rate": 0.2672,
+    "auroc": 0.5068,
+    "precision_at_48": 0.25,
+    "sensitivity_at_48": 0.0938,
+    "precision_at_50": 0.24,
+    "sensitivity_at_50": 0.0938,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4492,
+     0.5606
+    ],
+    "precision_at_48_ci95": [
+     0.125,
+     0.3542
+    ],
+    "precision_at_50_ci95": [
+     0.12,
+     0.36
+    ]
+   },
+   "low_point_biserial | scorable tasks": {
+    "n": 479,
+    "positives": 128,
+    "base_rate": 0.2672,
+    "auroc": 0.5234,
+    "precision_at_48": 0.2292,
+    "sensitivity_at_48": 0.0859,
+    "precision_at_50": 0.22,
+    "sensitivity_at_50": 0.0859,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4702,
+     0.5819
+    ],
+    "precision_at_48_ci95": [
+     0.125,
+     0.375
+    ],
+    "precision_at_50_ci95": [
+     0.14,
+     0.36
+    ]
+   },
+   "low_discrimination_2pl | all tasks": {
+    "n": 730,
+    "positives": 214,
+    "base_rate": 0.2932,
+    "auroc": 0.5199,
+    "precision_at_50": 0.36,
+    "sensitivity_at_50": 0.0841,
+    "precision_at_73": 0.3151,
+    "sensitivity_at_73": 0.1075,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.476,
+     0.5631
+    ],
+    "precision_at_50_ci95": [
+     0.22,
+     0.48
+    ],
+    "precision_at_73_ci95": [
+     0.2192,
+     0.4247
+    ]
+   },
+   "high_rasch_outfit | all tasks": {
+    "n": 730,
+    "positives": 214,
+    "base_rate": 0.2932,
+    "auroc": 0.4845,
+    "precision_at_50": 0.3,
+    "sensitivity_at_50": 0.0701,
+    "precision_at_73": 0.3151,
+    "sensitivity_at_73": 0.1075,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4393,
+     0.5302
+    ],
+    "precision_at_50_ci95": [
+     0.18,
+     0.44
+    ],
+    "precision_at_73_ci95": [
+     0.2055,
+     0.411
+    ]
+   },
+   "high_rasch_infit | all tasks": {
+    "n": 730,
+    "positives": 214,
+    "base_rate": 0.2932,
+    "auroc": 0.4853,
+    "precision_at_50": 0.32,
+    "sensitivity_at_50": 0.0748,
+    "precision_at_73": 0.3425,
+    "sensitivity_at_73": 0.1168,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.437,
+     0.5333
+    ],
+    "precision_at_50_ci95": [
+     0.18,
+     0.46
+    ],
+    "precision_at_73_ci95": [
+     0.2329,
+     0.4521
+    ]
+   }
+  },
+  "D3_gold_patch_revised": {
+   "positives": 38,
+   "low_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 38,
+    "base_rate": 0.0521,
+    "auroc": 0.6909,
+    "precision_at_50": 0.02,
+    "sensitivity_at_50": 0.0263,
+    "precision_at_73": 0.137,
+    "sensitivity_at_73": 0.2632,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.6081,
+     0.763
+    ],
+    "precision_at_50_ci95": [
+     0.4,
+     0.64
+    ],
+    "precision_at_73_ci95": [
+     0.274,
+     0.4384
+    ]
+   },
+   "high_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 38,
+    "base_rate": 0.0521,
+    "auroc": 0.3091,
+    "precision_at_50": 0.02,
+    "sensitivity_at_50": 0.0263,
+    "precision_at_73": 0.0137,
+    "sensitivity_at_73": 0.0263,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.2392,
+     0.3885
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.06
+    ],
+    "precision_at_73_ci95": [
+     0.0,
+     0.0411
+    ]
+   },
+   "low_tetrachoric | scorable tasks": {
+    "n": 479,
+    "positives": 12,
+    "base_rate": 0.0251,
+    "auroc": 0.5003,
+    "precision_at_48": 0.0,
+    "sensitivity_at_48": 0.0,
+    "precision_at_50": 0.0,
+    "sensitivity_at_50": 0.0,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3842,
+     0.6221
+    ],
+    "precision_at_48_ci95": [
+     0.0,
+     0.0
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "low_scalability | scorable tasks": {
+    "n": 479,
+    "positives": 12,
+    "base_rate": 0.0251,
+    "auroc": 0.5374,
+    "precision_at_48": 0.0417,
+    "sensitivity_at_48": 0.1667,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.1667,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4061,
+     0.6654
+    ],
+    "precision_at_48_ci95": [
+     0.0,
+     0.1042
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.1
+    ]
+   },
+   "low_item_total | scorable tasks": {
+    "n": 479,
+    "positives": 12,
+    "base_rate": 0.0251,
+    "auroc": 0.5392,
+    "precision_at_48": 0.0417,
+    "sensitivity_at_48": 0.1667,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.1667,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.397,
+     0.6768
+    ],
+    "precision_at_48_ci95": [
+     0.0,
+     0.1042
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.1
+    ]
+   },
+   "low_ensemble | scorable tasks": {
+    "n": 479,
+    "positives": 12,
+    "base_rate": 0.0251,
+    "auroc": 0.523,
+    "precision_at_48": 0.0417,
+    "sensitivity_at_48": 0.1667,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.1667,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.3988,
+     0.6487
+    ],
+    "precision_at_48_ci95": [
+     0.0,
+     0.0833
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.08
+    ]
+   },
+   "low_point_biserial | scorable tasks": {
+    "n": 479,
+    "positives": 12,
+    "base_rate": 0.0251,
+    "auroc": 0.5396,
+    "precision_at_48": 0.0417,
+    "sensitivity_at_48": 0.1667,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.1667,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4098,
+     0.6747
+    ],
+    "precision_at_48_ci95": [
+     0.0,
+     0.1042
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.1
+    ]
+   },
+   "low_discrimination_2pl | all tasks": {
+    "n": 730,
+    "positives": 38,
+    "base_rate": 0.0521,
+    "auroc": 0.468,
+    "precision_at_50": 0.02,
+    "sensitivity_at_50": 0.0263,
+    "precision_at_73": 0.0274,
+    "sensitivity_at_73": 0.0526,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4047,
+     0.535
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.06
+    ],
+    "precision_at_73_ci95": [
+     0.0,
+     0.0822
+    ]
+   },
+   "high_rasch_outfit | all tasks": {
+    "n": 730,
+    "positives": 38,
+    "base_rate": 0.0521,
+    "auroc": 0.3412,
+    "precision_at_50": 0.04,
+    "sensitivity_at_50": 0.0526,
+    "precision_at_73": 0.0274,
+    "sensitivity_at_73": 0.0526,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.2564,
+     0.4357
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.1
+    ],
+    "precision_at_73_ci95": [
+     0.0,
+     0.0685
+    ]
+   },
+   "high_rasch_infit | all tasks": {
+    "n": 730,
+    "positives": 38,
+    "base_rate": 0.0521,
+    "auroc": 0.3448,
+    "precision_at_50": 0.02,
+    "sensitivity_at_50": 0.0263,
+    "precision_at_73": 0.0411,
+    "sensitivity_at_73": 0.0789,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.257,
+     0.437
+    ],
+    "precision_at_50_ci95": [
+     0.0,
+     0.06
+    ],
+    "precision_at_73_ci95": [
+     0.0,
+     0.0822
+    ]
+   }
+  },
+  "D4_any": {
+   "positives": 303,
+   "low_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 303,
+    "base_rate": 0.4151,
+    "auroc": 0.5552,
+    "precision_at_50": 0.54,
+    "sensitivity_at_50": 0.0891,
+    "precision_at_73": 0.6164,
+    "sensitivity_at_73": 0.1485,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.5122,
+     0.5951
+    ],
+    "precision_at_50_ci95": [
+     1.0,
+     1.0
+    ],
+    "precision_at_73_ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "high_pass_rate | all tasks": {
+    "n": 730,
+    "positives": 303,
+    "base_rate": 0.4151,
+    "auroc": 0.4448,
+    "precision_at_50": 0.26,
+    "sensitivity_at_50": 0.0429,
+    "precision_at_73": 0.3014,
+    "sensitivity_at_73": 0.0726,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4053,
+     0.4855
+    ],
+    "precision_at_50_ci95": [
+     0.2,
+     0.48
+    ],
+    "precision_at_73_ci95": [
+     0.2329,
+     0.4521
+    ]
+   },
+   "low_tetrachoric | scorable tasks": {
+    "n": 479,
+    "positives": 181,
+    "base_rate": 0.3779,
+    "auroc": 0.4674,
+    "precision_at_48": 0.3125,
+    "sensitivity_at_48": 0.0829,
+    "precision_at_50": 0.32,
+    "sensitivity_at_50": 0.0884,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.412,
+     0.5205
+    ],
+    "precision_at_48_ci95": [
+     0.2083,
+     0.4583
+    ],
+    "precision_at_50_ci95": [
+     0.2,
+     0.46
+    ]
+   },
+   "low_scalability | scorable tasks": {
+    "n": 479,
+    "positives": 181,
+    "base_rate": 0.3779,
+    "auroc": 0.4941,
+    "precision_at_48": 0.3125,
+    "sensitivity_at_48": 0.0829,
+    "precision_at_50": 0.3,
+    "sensitivity_at_50": 0.0829,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4406,
+     0.546
+    ],
+    "precision_at_48_ci95": [
+     0.1875,
+     0.4583
+    ],
+    "precision_at_50_ci95": [
+     0.2,
+     0.44
+    ]
+   },
+   "low_item_total | scorable tasks": {
+    "n": 479,
+    "positives": 181,
+    "base_rate": 0.3779,
+    "auroc": 0.4937,
+    "precision_at_48": 0.3125,
+    "sensitivity_at_48": 0.0829,
+    "precision_at_50": 0.3,
+    "sensitivity_at_50": 0.0829,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4388,
+     0.5457
+    ],
+    "precision_at_48_ci95": [
+     0.1875,
+     0.4583
+    ],
+    "precision_at_50_ci95": [
+     0.2,
+     0.46
+    ]
+   },
+   "low_ensemble | scorable tasks": {
+    "n": 479,
+    "positives": 181,
+    "base_rate": 0.3779,
+    "auroc": 0.4808,
+    "precision_at_48": 0.3542,
+    "sensitivity_at_48": 0.0939,
+    "precision_at_50": 0.34,
+    "sensitivity_at_50": 0.0939,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4284,
+     0.5348
+    ],
+    "precision_at_48_ci95": [
+     0.2292,
+     0.4792
+    ],
+    "precision_at_50_ci95": [
+     0.22,
+     0.48
+    ]
+   },
+   "low_point_biserial | scorable tasks": {
+    "n": 479,
+    "positives": 181,
+    "base_rate": 0.3779,
+    "auroc": 0.4939,
+    "precision_at_48": 0.3125,
+    "sensitivity_at_48": 0.0829,
+    "precision_at_50": 0.3,
+    "sensitivity_at_50": 0.0829,
+    "k_10pct": 48,
+    "auroc_ci95": [
+     0.4437,
+     0.5451
+    ],
+    "precision_at_48_ci95": [
+     0.2083,
+     0.4583
+    ],
+    "precision_at_50_ci95": [
+     0.2,
+     0.46
+    ]
+   },
+   "low_discrimination_2pl | all tasks": {
+    "n": 730,
+    "positives": 303,
+    "base_rate": 0.4151,
+    "auroc": 0.4907,
+    "precision_at_50": 0.42,
+    "sensitivity_at_50": 0.0693,
+    "precision_at_73": 0.4384,
+    "sensitivity_at_73": 0.1056,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4507,
+     0.5307
+    ],
+    "precision_at_50_ci95": [
+     0.3,
+     0.56
+    ],
+    "precision_at_73_ci95": [
+     0.3151,
+     0.5342
+    ]
+   },
+   "high_rasch_outfit | all tasks": {
+    "n": 730,
+    "positives": 303,
+    "base_rate": 0.4151,
+    "auroc": 0.4671,
+    "precision_at_50": 0.4,
+    "sensitivity_at_50": 0.066,
+    "precision_at_73": 0.3973,
+    "sensitivity_at_73": 0.0957,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4245,
+     0.5087
+    ],
+    "precision_at_50_ci95": [
+     0.28,
+     0.54
+    ],
+    "precision_at_73_ci95": [
+     0.2877,
+     0.5068
+    ]
+   },
+   "high_rasch_infit | all tasks": {
+    "n": 730,
+    "positives": 303,
+    "base_rate": 0.4151,
+    "auroc": 0.4649,
+    "precision_at_50": 0.36,
+    "sensitivity_at_50": 0.0594,
+    "precision_at_73": 0.4384,
+    "sensitivity_at_73": 0.1056,
+    "k_10pct": 73,
+    "auroc_ci95": [
+     0.4232,
+     0.507
+    ],
+    "precision_at_50_ci95": [
+     0.22,
+     0.52
+    ],
+    "precision_at_73_ci95": [
+     0.3151,
+     0.5479
+    ]
+   }
+  }
+ }
+}

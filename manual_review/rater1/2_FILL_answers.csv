@@ -1,0 +1,50 @@
+task_no,instance_id,Q1_description_sufficient (yes|partly|no),Q2_tests_reject_valid_fix (yes|no),Q3_fix_given_in_description (yes|partly|no),Q4_difficulty_if_fair (easy|medium|hard),note (one sentence)
+1,django__django-14411,yes,no,no,easy,Description states the label must have no 'for' attribute and the tests check exactly that via id_for_label and label_tag.
+2,django__django-16595,yes,no,yes,easy,"Description shows the failing optimizer case and already contains the isinstance(operation, AlterField) branch that the reference fix adds."
+3,django__django-12453,yes,no,partly,easy,Description includes a diff wrapping deserialization in transaction.atomic which is the core of the fix but the reference also disables and re-checks constraints so I chose partly over yes.
+4,astropy__astropy-14182,partly,yes,no,,Description only asks for header_rows when writing RST but the test also reads a table with header_rows and round-trips it so a write-only fix fails; unsure between Q2 yes and no and picked yes.
+5,matplotlib__matplotlib-23562,partly,no,no,medium,Issue only shows get_facecolors failing while the tests also call get_edgecolor but any sensible fix covers both since they share the same uninitialised-attribute cause.
+6,sympy__sympy-18199,no,yes,no,,Description only asks for the x = 0 root when a % p == 0 but the tests require a full composite-modulus implementation and changed solveset outputs that are never mentioned.
+7,pydata__xarray-5131,yes,no,no,easy,Description pinpoints the trailing space in the GroupBy repr and the tests only check that it is gone.
+8,sympy__sympy-14817,yes,no,no,medium,Traceback and the remark that sympify must not be used on MatrixSymbol names define the bug and the tests check the natural printed output including the existing negative-coefficient style.
+9,sympy__sympy-14774,yes,no,yes,easy,Description names the exact line and the replacement inv_trig_table list that the reference fix uses.
+10,django__django-16139,yes,no,yes,easy,Description gives the exact replacement of the help_text format call and the test checks the resulting link resolves to the password change URL.
+11,scikit-learn__scikit-learn-25747,partly,yes,no,,Description only expects no error but the tests require that a DataFrame index is never overridden even when lengths match so a fix that only skips on length mismatch fails.
+12,sympy__sympy-21612,partly,no,no,medium,Description blames the LaTeX parser while the real defect and the test are in the str printer which a developer finds on inspecting the parsed tree; unsure on Q2 and picked no.
+13,pydata__xarray-4094,yes,no,no,medium,Description gives a minimal failing roundtrip and the test asserts exactly that roundtrip is identical.
+14,matplotlib__matplotlib-23476,yes,no,no,medium,Expected behaviour of dpi unchanged after unpickling is clear and the test checks it through the device pixel ratio which any correct fix satisfies though the cause needs digging.
+15,matplotlib__matplotlib-25442,yes,no,no,medium,Traceback shows the disconnect on a removed artist failing and the test only checks no exception is raised after remove so any working fix passes.
+16,mwaskom__seaborn-3190,partly,yes,no,,Description shows a Plot color mapping crash with booleans but the test calls Continuous()._setup on a bool series directly so a valid fix that maps booleans to a nominal scale would fail.
+17,sympy__sympy-12419,yes,no,no,medium,Description clearly states the total sum should be n and the tests check that sum for an Identity matrix which any correct fix must satisfy.
+18,sympy__sympy-21614,yes,no,no,easy,Description shows Derivative.kind should match the Integral behaviour and the tests check exactly the matrix and scalar kinds.
+19,pytest-dev__pytest-11143,yes,no,no,easy,Title and traceback show a leading numeric expression is mistaken for a docstring and the test only requires such a file to be collected without error.
+20,django__django-16046,partly,no,no,easy,Description says a null value triggers the IndexError but the test also pins None to format as the string None which is unstated though the simplest guard on an empty string passes; unsure on Q2 and picked no.
+21,django__django-14855,yes,no,yes,easy,Description contains the exact reverse call with current_app that the reference fix applies.
+22,django__django-12915,yes,no,no,medium,Description asks for get_response_async on the static files handler and the tests call it for an existing and a missing file which any correct implementation passes.
+23,sympy__sympy-18698,partly,no,no,medium,Description is terse and loosely worded but gives the expected combined factor of multiplicity 3 and the tests check that plus a consistent consequence for x*(x + y).
+24,sympy__sympy-13971,yes,no,no,easy,Description says the square brackets should not be backslash-escaped and the tests check the same strings with the backslashes removed though a fix that also dropped \left and \right would fail.
+25,astropy__astropy-14365,partly,no,no,easy,Description speaks of lower-case commands while the test also lower-cases the NO data markers but the statement that QDP is not case sensitive covers it; unsure on Q2 and picked no.
+26,matplotlib__matplotlib-23299,no,yes,no,,Description is about get_backend clearing figures while the only test asserts that rc_context does not reset the backend rcParam which is one specific fix that the description never states.
+27,django__django-15695,no,yes,no,,Description says the old auto-generated name should be restored on backward but the tests keep backward as a zero-query no-op and re-apply forwards with swapped states so a fix following the description fails.
+28,django__django-11797,yes,no,no,medium,Description shows the GROUP BY of the inner query being overridden and the test checks the filtered result is the correct row which any correct fix gives.
+29,sphinx-doc__sphinx-11445,yes,no,no,medium,Description gives a full reproduction and the tests check prepend_prolog output for a heading starting with a role which is the natural place and result for a fix.
+30,django__django-14752,yes,no,yes,easy,Description spells out the serialize_result method with its signature and body and the test overrides exactly that method.
+31,django__django-16379,yes,no,no,easy,Description explains the race between exists and open and the test simulates the file vanishing at open and expects False which any correct fix returns.
+32,django__django-15814,yes,no,yes,easy,Description states the line to change and the concrete_model replacement which is equivalent to the reference fix.
+33,django__django-16873,yes,no,no,easy,Description states the joiner must not be escaped when autoescape is off and includes a test equivalent to the grading test.
+34,django__django-15213,yes,no,no,medium,Description shows the empty SELECT for the negated empty Q and the tests check the annotation evaluates to true in plain grouped and aggregated queries which follow from a correct fix.
+35,pylint-dev__pylint-7993,yes,no,no,easy,Description shows doubled braces in the message template being misparsed and the tests check the documented output and the unchanged warning for unknown fields.
+36,django__django-13658,yes,no,yes,easy,Description contains the exact CommandParser call with prog=self.prog_name that the reference fix makes.
+37,django__django-13447,partly,yes,no,,Description asks for access to the model class in app_list but never names the dictionary key and the tests demand the exact key 'model'; unsure on Q2 and picked yes.
+38,django__django-16041,yes,no,no,easy,Description states empty_permitted should be ignored for empty_form and the test checks empty_form.empty_permitted stays True.
+39,sympy__sympy-21379,yes,no,no,hard,Description gives a precise reproduction and the tests only require no exception but the cause lies deep in Mod evaluation far from the symptom.
+40,django__django-15498,yes,no,no,easy,Description is brief but states an empty If-Modified-Since header must be ignored again and the test checks was_modified_since returns True for an empty string.
+41,django__django-15252,no,yes,no,,Description asks MigrationRecorder to obey router allow_migrate but the tests instead require that ensure_schema is not called when there are no migrations to apply so a router-based fix fails.
+42,django__django-12308,partly,yes,partly,,Description points to display_for_field and prepare_value but the test also demands a fallback to the dict repr for non-serialisable keys which the suggested approach would not produce; unsure on Q2 and picked yes.
+43,django__django-14667,yes,no,no,medium,Description lists the wrong and expected field sets for only().defer() chains and the tests check deferred field counts consistent with them.
+44,django__django-14534,partly,yes,partly,,Description gives the one-line change but as written it raises KeyError when no id is set while the test requires None instead of the previous id_name_0 value which is unstated; unsure on Q2 and picked yes.
+45,django__django-14155,no,yes,no,,Description only asks for a nicer repr of partial views but the tests demand one exact repr string including new quoting of url_name and route that is not mentioned.
+46,psf__requests-863,partly,yes,no,,Description asks for Request.__init__ to accept lists of hooks but the test also requires register_hook itself to accept a list so a fix made only in __init__ fails.
+47,sympy__sympy-17630,partly,yes,no,,Description covers the BlockMatrix multiplication crash but the tests also require Add of two ZeroMatrix objects to return a ZeroMatrix so a fix inside blockmatrix alone fails; unsure on Q2 and picked yes.
+48,pytest-dev__pytest-5227,yes,no,yes,easy,Description proposes the exact new DEFAULT_LOG_FORMAT string and the tests match the output it produces.
+49,scikit-learn__scikit-learn-13584,yes,no,no,easy,Description gives a short reproduction of the array comparison error and the test only checks that repr no longer raises.

@@ -1,0 +1,21 @@
+task_no,instance_id,Q1_description_sufficient (yes|partly|no),Q2_tests_reject_valid_fix (yes|no),Q3_fix_given_in_description (yes|partly|no),Q4_difficulty_if_fair (easy|medium|hard),note (a few words)
+1,matplotlib__matplotlib-23562,partly,no,no,medium,test checks edgecolor too but description only mentions facecolor
+2,sympy__sympy-18698,yes,no,no,medium,test verifies factors with same multiplicity are combined
+3,django__django-14855,yes,no,yes,easy,fix code given directly in description
+4,django__django-13658,yes,no,yes,easy,exact fix given in description
+5,scikit-learn__scikit-learn-13584,yes,no,no,easy,use repr comparison to handle array params
+6,astropy__astropy-14182,yes,no,no,medium,needs header_rows support in both read and write paths
+7,matplotlib__matplotlib-25442,partly,no,no,hard,complex refactor of event callback system not implied by description
+8,django__django-15498,yes,no,no,easy,add None check after regex match
+9,django__django-12453,partly,no,partly,medium,description gives atomic idea but fix also disables constraints
+10,django__django-14411,yes,no,no,easy,override id_for_label to return None
+11,sympy__sympy-21379,yes,no,no,medium,catch PolynomialError in Mod.eval gcd call
+12,django__django-15252,yes,no,no,medium,fix in executor not recorder as description might suggest
+13,mwaskom__seaborn-3190,yes,no,no,easy,cast vmin and vmax to float
+14,pydata__xarray-4094,yes,no,no,easy,add drop=True to sel call
+15,sphinx-doc__sphinx-11445,yes,no,no,medium,docinfo regex misclassifies role headings as docinfo lines
+16,pytest-dev__pytest-5227,yes,no,yes,easy,exact log format string given in description
+17,sympy__sympy-14817,yes,no,no,medium,use as_coeff_mmul not args[0] for negativity check
+18,matplotlib__matplotlib-23476,yes,no,no,medium,save original dpi before pixel ratio scaling in __getstate__
+19,django__django-15213,yes,no,no,medium,override select_format in BooleanField to replace empty sql with 1
+20,matplotlib__matplotlib-23299,yes,no,no,medium,rc_context was restoring backend key clearing Gcf figures

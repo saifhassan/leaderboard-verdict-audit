@@ -1,0 +1,206 @@
+{
+ "lite_A:A1_filter_out": {
+  "agents": 84,
+  "effective_agents_participation_ratio": 4.19,
+  "family_counts": {
+   "claude": 24,
+   "deepseek": 2,
+   "gpt": 19,
+   "llama": 2,
+   "qwen": 5,
+   "unknown": 32
+  },
+  "leave_one_family_out": {
+   "claude": {
+    "agents": 60,
+    "zero_variance": 42,
+    "low_pass_rate | all tasks": 0.7441,
+    "low_pass_rate | scorable tasks": 0.6905,
+    "low_tetrachoric | scorable tasks": 0.7043,
+    "low_scalability | scorable tasks": 0.6963,
+    "low_item_total | scorable tasks": 0.7007,
+    "low_ensemble | scorable tasks": 0.7061
+   },
+   "gpt": {
+    "agents": 65,
+    "zero_variance": 27,
+    "low_pass_rate | all tasks": 0.7452,
+    "low_pass_rate | scorable tasks": 0.7143,
+    "low_tetrachoric | scorable tasks": 0.7127,
+    "low_scalability | scorable tasks": 0.6989,
+    "low_item_total | scorable tasks": 0.7023,
+    "low_ensemble | scorable tasks": 0.7057
+   },
+   "qwen": {
+    "agents": 79,
+    "zero_variance": 28,
+    "low_pass_rate | all tasks": 0.7454,
+    "low_pass_rate | scorable tasks": 0.7118,
+    "low_tetrachoric | scorable tasks": 0.7096,
+    "low_scalability | scorable tasks": 0.6963,
+    "low_item_total | scorable tasks": 0.7073,
+    "low_ensemble | scorable tasks": 0.7062
+   },
+   "unknown": {
+    "agents": 52,
+    "zero_variance": 35,
+    "low_pass_rate | all tasks": 0.7409,
+    "low_pass_rate | scorable tasks": 0.709,
+    "low_tetrachoric | scorable tasks": 0.7101,
+    "low_scalability | scorable tasks": 0.6906,
+    "low_item_total | scorable tasks": 0.7,
+    "low_ensemble | scorable tasks": 0.7055
+   }
+  },
+  "dated_halves": {
+   "earliest": {
+    "range": [
+     "20231010",
+     "20241028"
+    ],
+    "agents": 42,
+    "zero_variance": 64,
+    "low_pass_rate | all tasks": 0.7274,
+    "low_pass_rate | scorable tasks": 0.6414,
+    "low_tetrachoric | scorable tasks": 0.6548,
+    "low_scalability | scorable tasks": 0.6541,
+    "low_item_total | scorable tasks": 0.6536,
+    "low_ensemble | scorable tasks": 0.6565
+   },
+   "latest": {
+    "range": [
+     "20241030",
+     "20250911"
+    ],
+    "agents": 42,
+    "zero_variance": 37,
+    "low_pass_rate | all tasks": 0.7498,
+    "low_pass_rate | scorable tasks": 0.7016,
+    "low_tetrachoric | scorable tasks": 0.615,
+    "low_scalability | scorable tasks": 0.5938,
+    "low_item_total | scorable tasks": 0.6031,
+    "low_ensemble | scorable tasks": 0.6105
+   }
+  },
+  "pass_rate_by_date_quarter": [
+   {
+    "submissions": [
+     "20231010",
+     "20240622"
+    ],
+    "mean_pass_rate_defective": 0.121,
+    "mean_pass_rate_clean": 0.275
+   },
+   {
+    "submissions": [
+     "20240623",
+     "20241028"
+    ],
+    "mean_pass_rate_defective": 0.2098,
+    "mean_pass_rate_clean": 0.4694
+   },
+   {
+    "submissions": [
+     "20241030",
+     "20250114"
+    ],
+    "mean_pass_rate_defective": 0.2692,
+    "mean_pass_rate_clean": 0.5705
+   },
+   {
+    "submissions": [
+     "20250205",
+     "20250911"
+    ],
+    "mean_pass_rate_defective": 0.3212,
+    "mean_pass_rate_clean": 0.6249
+   }
+  ]
+ },
+ "verified_C:C1_weak_tests": {
+  "agents": 134,
+  "effective_agents_participation_ratio": 4.2,
+  "family_counts": {
+   "claude": 31,
+   "deepseek": 1,
+   "gemini": 3,
+   "gpt": 20,
+   "llama": 3,
+   "other_named": 9,
+   "qwen": 6,
+   "unknown": 61
+  },
+  "leave_one_family_out": {
+   "claude": {
+    "agents": 103,
+    "zero_variance": 36,
+    "low_pass_rate | all tasks": 0.3382,
+    "low_pass_rate | scorable tasks": 0.366,
+    "low_tetrachoric | scorable tasks": 0.4224,
+    "low_scalability | scorable tasks": 0.4874,
+    "low_item_total | scorable tasks": 0.4812,
+    "low_ensemble | scorable tasks": 0.4849
+   },
+   "gemini": {
+    "agents": 131,
+    "zero_variance": 32,
+    "low_pass_rate | all tasks": 0.3375,
+    "low_pass_rate | scorable tasks": 0.3619,
+    "low_tetrachoric | scorable tasks": 0.4188,
+    "low_scalability | scorable tasks": 0.4655,
+    "low_item_total | scorable tasks": 0.4646,
+    "low_ensemble | scorable tasks": 0.464
+   },
+   "gpt": {
+    "agents": 114,
+    "zero_variance": 33,
+    "low_pass_rate | all tasks": 0.3392,
+    "low_pass_rate | scorable tasks": 0.3646,
+    "low_tetrachoric | scorable tasks": 0.4116,
+    "low_scalability | scorable tasks": 0.4627,
+    "low_item_total | scorable tasks": 0.4691,
+    "low_ensemble | scorable tasks": 0.4567
+   },
+   "llama": {
+    "agents": 131,
+    "zero_variance": 32,
+    "low_pass_rate | all tasks": 0.3399,
+    "low_pass_rate | scorable tasks": 0.3645,
+    "low_tetrachoric | scorable tasks": 0.4211,
+    "low_scalability | scorable tasks": 0.4673,
+    "low_item_total | scorable tasks": 0.47,
+    "low_ensemble | scorable tasks": 0.4627
+   },
+   "other_named": {
+    "agents": 125,
+    "zero_variance": 32,
+    "low_pass_rate | all tasks": 0.3388,
+    "low_pass_rate | scorable tasks": 0.3633,
+    "low_tetrachoric | scorable tasks": 0.4208,
+    "low_scalability | scorable tasks": 0.4708,
+    "low_item_total | scorable tasks": 0.4718,
+    "low_ensemble | scorable tasks": 0.4709
+   },
+   "qwen": {
+    "agents": 128,
+    "zero_variance": 33,
+    "low_pass_rate | all tasks": 0.344,
+    "low_pass_rate | scorable tasks": 0.3697,
+    "low_tetrachoric | scorable tasks": 0.4212,
+    "low_scalability | scorable tasks": 0.4636,
+    "low_item_total | scorable tasks": 0.4655,
+    "low_ensemble | scorable tasks": 0.4647
+   },
+   "unknown": {
+    "agents": 73,
+    "zero_variance": 39,
+    "low_pass_rate | all tasks": 0.3353,
+    "low_pass_rate | scorable tasks": 0.3653,
+    "low_tetrachoric | scorable tasks": 0.4075,
+    "low_scalability | scorable tasks": 0.4413,
+    "low_item_total | scorable tasks": 0.4462,
+    "low_ensemble | scorable tasks": 0.4345
+   }
+  }
+ }
+}

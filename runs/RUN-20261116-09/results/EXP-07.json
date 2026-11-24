@@ -1,0 +1,558 @@
+{
+ "lite_A": {
+  "A1_filter_out": {
+   "overall": {
+    "n": 231,
+    "positives": 133,
+    "base_rate": 0.5758,
+    "auroc": 0.7459,
+    "precision_at_23": 0.8696,
+    "sensitivity_at_23": 0.1504,
+    "precision_at_50": 0.86,
+    "sensitivity_at_50": 0.3233,
+    "k_10pct": 23,
+    "auroc_ci95": [
+     0.6834,
+     0.8088
+    ],
+    "precision_at_23_ci95": [
+     0.7826,
+     1.0
+    ],
+    "precision_at_50_ci95": [
+     0.8,
+     0.98
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 87,
+     "positives": 37,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    "15 min - 1 hour": {
+     "n": 130,
+     "positives": 85,
+     "base_rate": 0.6538,
+     "auroc": 0.7345,
+     "precision_at_13": 0.9231,
+     "sensitivity_at_13": 0.1412,
+     "precision_at_50": 0.84,
+     "sensitivity_at_50": 0.4941,
+     "k_10pct": 13,
+     "auroc_ci95": [
+      0.6427,
+      0.8158
+     ],
+     "precision_at_13_ci95": [
+      0.8462,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      0.76,
+      0.94
+     ]
+    },
+    "1-4 hours": {
+     "n": 14,
+     "positives": 11,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    ">4 hours": {
+     "n": 0,
+     "positives": 0,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.791,
+    "ci95": [
+     -1.1753,
+     -0.4895
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  },
+  "A2_tests_reject_valid": {
+   "overall": {
+    "n": 231,
+    "positives": 113,
+    "base_rate": 0.4892,
+    "auroc": 0.7176,
+    "precision_at_23": 0.7826,
+    "sensitivity_at_23": 0.1593,
+    "precision_at_50": 0.78,
+    "sensitivity_at_50": 0.3451,
+    "k_10pct": 23,
+    "auroc_ci95": [
+     0.6463,
+     0.7818
+    ],
+    "precision_at_23_ci95": [
+     0.6522,
+     1.0
+    ],
+    "precision_at_50_ci95": [
+     0.68,
+     0.92
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 87,
+     "positives": 29,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    "15 min - 1 hour": {
+     "n": 130,
+     "positives": 76,
+     "base_rate": 0.5846,
+     "auroc": 0.7093,
+     "precision_at_13": 0.9231,
+     "sensitivity_at_13": 0.1579,
+     "precision_at_50": 0.76,
+     "sensitivity_at_50": 0.5,
+     "k_10pct": 13,
+     "auroc_ci95": [
+      0.6223,
+      0.7937
+     ],
+     "precision_at_13_ci95": [
+      0.8462,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      0.68,
+      0.88
+     ]
+    },
+    "1-4 hours": {
+     "n": 14,
+     "positives": 8,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    ">4 hours": {
+     "n": 0,
+     "positives": 0,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.6912,
+    "ci95": [
+     -1.0456,
+     -0.4228
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  },
+  "A3_underspecified": {
+   "overall": {
+    "n": 231,
+    "positives": 71,
+    "base_rate": 0.3074,
+    "auroc": 0.655,
+    "precision_at_23": 0.3913,
+    "sensitivity_at_23": 0.1268,
+    "precision_at_50": 0.44,
+    "sensitivity_at_50": 0.3099,
+    "k_10pct": 23,
+    "auroc_ci95": [
+     0.5807,
+     0.7245
+    ],
+    "precision_at_23_ci95": [
+     0.3043,
+     0.7826
+    ],
+    "precision_at_50_ci95": [
+     0.34,
+     0.6
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 87,
+     "positives": 17,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    "15 min - 1 hour": {
+     "n": 130,
+     "positives": 49,
+     "base_rate": 0.3769,
+     "auroc": 0.6164,
+     "precision_at_13": 0.3077,
+     "sensitivity_at_13": 0.0816,
+     "precision_at_50": 0.44,
+     "sensitivity_at_50": 0.449,
+     "k_10pct": 13,
+     "auroc_ci95": [
+      0.5203,
+      0.7128
+     ],
+     "precision_at_13_ci95": [
+      0.2308,
+      0.7692
+     ],
+     "precision_at_50_ci95": [
+      0.34,
+      0.56
+     ]
+    },
+    "1-4 hours": {
+     "n": 14,
+     "positives": 5,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    },
+    ">4 hours": {
+     "n": 0,
+     "positives": 0,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.5464,
+    "ci95": [
+     -0.9705,
+     -0.2567
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  }
+ },
+ "test_A": {
+  "A1_filter_out": {
+   "overall": {
+    "n": 1699,
+    "positives": 1160,
+    "base_rate": 0.6828,
+    "auroc": 0.7604,
+    "precision_at_50": 0.84,
+    "sensitivity_at_50": 0.0362,
+    "precision_at_170": 0.8588,
+    "sensitivity_at_170": 0.1259,
+    "k_10pct": 170,
+    "auroc_ci95": [
+     0.7355,
+     0.7834
+    ],
+    "precision_at_50_ci95": [
+     1.0,
+     1.0
+    ],
+    "precision_at_170_ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 417,
+     "positives": 204,
+     "base_rate": 0.4892,
+     "auroc": 0.722,
+     "precision_at_42": 0.7619,
+     "sensitivity_at_42": 0.1569,
+     "precision_at_50": 0.78,
+     "sensitivity_at_50": 0.1912,
+     "k_10pct": 42,
+     "auroc_ci95": [
+      0.6707,
+      0.7677
+     ],
+     "precision_at_42_ci95": [
+      0.8571,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      0.76,
+      1.0
+     ]
+    },
+    "15 min - 1 hour": {
+     "n": 906,
+     "positives": 625,
+     "base_rate": 0.6898,
+     "auroc": 0.7238,
+     "precision_at_50": 0.84,
+     "sensitivity_at_50": 0.0672,
+     "precision_at_91": 0.8571,
+     "sensitivity_at_91": 0.1248,
+     "k_10pct": 91,
+     "auroc_ci95": [
+      0.6893,
+      0.7573
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_91_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "1-4 hours": {
+     "n": 329,
+     "positives": 287,
+     "base_rate": 0.8723,
+     "auroc": 0.6689,
+     "precision_at_33": 0.9091,
+     "sensitivity_at_33": 0.1045,
+     "precision_at_50": 0.9,
+     "sensitivity_at_50": 0.1568,
+     "k_10pct": 33,
+     "auroc_ci95": [
+      0.5843,
+      0.7495
+     ],
+     "precision_at_33_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    ">4 hours": {
+     "n": 47,
+     "positives": 44,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.7735,
+    "ci95": [
+     -0.9017,
+     -0.6519
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  },
+  "A2_tests_reject_valid": {
+   "overall": {
+    "n": 1699,
+    "positives": 1039,
+    "base_rate": 0.6115,
+    "auroc": 0.7578,
+    "precision_at_50": 0.8,
+    "sensitivity_at_50": 0.0385,
+    "precision_at_170": 0.8176,
+    "sensitivity_at_170": 0.1338,
+    "k_10pct": 170,
+    "auroc_ci95": [
+     0.7341,
+     0.7812
+    ],
+    "precision_at_50_ci95": [
+     1.0,
+     1.0
+    ],
+    "precision_at_170_ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 417,
+     "positives": 174,
+     "base_rate": 0.4173,
+     "auroc": 0.7305,
+     "precision_at_42": 0.7381,
+     "sensitivity_at_42": 0.1782,
+     "precision_at_50": 0.76,
+     "sensitivity_at_50": 0.2184,
+     "k_10pct": 42,
+     "auroc_ci95": [
+      0.6819,
+      0.7773
+     ],
+     "precision_at_42_ci95": [
+      0.8327,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      0.72,
+      1.0
+     ]
+    },
+    "15 min - 1 hour": {
+     "n": 906,
+     "positives": 550,
+     "base_rate": 0.6071,
+     "auroc": 0.7228,
+     "precision_at_50": 0.8,
+     "sensitivity_at_50": 0.0727,
+     "precision_at_91": 0.8242,
+     "sensitivity_at_91": 0.1364,
+     "k_10pct": 91,
+     "auroc_ci95": [
+      0.6889,
+      0.756
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_91_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "1-4 hours": {
+     "n": 329,
+     "positives": 272,
+     "base_rate": 0.8267,
+     "auroc": 0.6596,
+     "precision_at_33": 0.8788,
+     "sensitivity_at_33": 0.1066,
+     "precision_at_50": 0.84,
+     "sensitivity_at_50": 0.1544,
+     "k_10pct": 33,
+     "auroc_ci95": [
+      0.5875,
+      0.7291
+     ],
+     "precision_at_33_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    ">4 hours": {
+     "n": 47,
+     "positives": 43,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.803,
+    "ci95": [
+     -0.945,
+     -0.684
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  },
+  "A3_underspecified": {
+   "overall": {
+    "n": 1699,
+    "positives": 650,
+    "base_rate": 0.3826,
+    "auroc": 0.6372,
+    "precision_at_50": 0.4,
+    "sensitivity_at_50": 0.0308,
+    "precision_at_170": 0.4412,
+    "sensitivity_at_170": 0.1154,
+    "k_10pct": 170,
+    "auroc_ci95": [
+     0.6106,
+     0.6643
+    ],
+    "precision_at_50_ci95": [
+     1.0,
+     1.0
+    ],
+    "precision_at_170_ci95": [
+     1.0,
+     1.0
+    ]
+   },
+   "within_difficulty": {
+    "<15 min fix": {
+     "n": 417,
+     "positives": 93,
+     "base_rate": 0.223,
+     "auroc": 0.6595,
+     "precision_at_42": 0.2619,
+     "sensitivity_at_42": 0.1183,
+     "precision_at_50": 0.3,
+     "sensitivity_at_50": 0.1613,
+     "k_10pct": 42,
+     "auroc_ci95": [
+      0.5969,
+      0.7172
+     ],
+     "precision_at_42_ci95": [
+      0.2857,
+      0.6429
+     ],
+     "precision_at_50_ci95": [
+      0.24,
+      0.54
+     ]
+    },
+    "15 min - 1 hour": {
+     "n": 906,
+     "positives": 363,
+     "base_rate": 0.4007,
+     "auroc": 0.6009,
+     "precision_at_50": 0.52,
+     "sensitivity_at_50": 0.0716,
+     "precision_at_91": 0.4835,
+     "sensitivity_at_91": 0.1212,
+     "k_10pct": 91,
+     "auroc_ci95": [
+      0.5656,
+      0.6362
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_91_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    "1-4 hours": {
+     "n": 329,
+     "positives": 164,
+     "base_rate": 0.4985,
+     "auroc": 0.5423,
+     "precision_at_33": 0.4545,
+     "sensitivity_at_33": 0.0915,
+     "precision_at_50": 0.5,
+     "sensitivity_at_50": 0.1524,
+     "k_10pct": 33,
+     "auroc_ci95": [
+      0.4915,
+      0.5918
+     ],
+     "precision_at_33_ci95": [
+      1.0,
+      1.0
+     ],
+     "precision_at_50_ci95": [
+      1.0,
+      1.0
+     ]
+    },
+    ">4 hours": {
+     "n": 47,
+     "positives": 30,
+     "note": "below 100 tasks: not analysed (protocol H8)"
+    }
+   },
+   "logistic_coefficient_standardised_pass_rate": {
+    "estimate": -0.4125,
+    "ci95": [
+     -0.5548,
+     -0.297
+    ],
+    "bootstrap": 500,
+    "note": "negative = lower pass rate, higher odds of the label, adjusted for difficulty bucket"
+   }
+  }
+ }
+}

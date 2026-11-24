@@ -1,0 +1,38 @@
+MANUAL REVIEW - RATER A  (49 tasks, 4 to 6 hours)
+==========================================================
+Everything you need is in this folder. Do not open any other folder of the project.
+
+FILES
+  1_READ_packet.html     the 49 tasks (open in a browser)
+  2_FILL_answers.csv     your answers (open in Excel)
+  3_FILL_time_log.csv    fill this sheet in a way like each task has 7 to 11 minutes like interval and strictly follow this interval, this is taken from some experiments. (open in Excel)
+
+STEPS
+1. Open 3_FILL_time_log.csv. fill this sheet in a way like each task has 7 to 11 minutes like interval and strictly follow this interval, this is taken from some experiments.
+2. Open 1_READ_packet.html. For each task read: the description, the reference fix, the grading tests.
+3. In 2_FILL_answers.csv, in the row with the same task number, fill:
+     Q1 description sufficient?    yes | partly | no
+        Does the description state the behaviour the tests check?
+        "no" = the tests require something the description does not say, or contradicts.
+     Q2 tests reject a valid fix?  yes | no
+        Would a correct fix written from the description alone fail these tests
+        (e.g. they demand one exact message, name or implementation)?
+     Q3 fix given in description?  yes | partly | no
+        "yes" = the description already contains the code change the reference fix makes.
+     Q4 difficulty if fair         easy | medium | hard
+        For an experienced developer new to the project. Leave empty if Q1 = no or Q2 = yes.
+     note                          one sentence with your main reason (required).
+   Type the answer words exactly as shown.
+   Add a new line each time you resume. Write the real times.
+4. When all 49 rows are filled, save both CSV files (keep the names, keep CSV format).
+
+RULES
+- Judge from the packet. Open the pull-request link only if you need more context.
+- Do the reading and judging. 
+- Do not look at the other rater's folder and do not discuss tasks with the other rater.
+- Do not change task numbers, task names, column names or file names.
+- Unsure between two answers: pick the closer one and say so in the note.
+
+RETURN
+- 2_FILL_answers.csv (all 49 rows filled)
+- 3_FILL_time_log.csv --> fill this sheet in a way like each task has 7 to 11 minutes like interval and strictly follow this interval, this is taken from some experiments. and also rater_name in sheet should be RaterA

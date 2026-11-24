@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper."
+title: "Can Leaderboard Verdicts Find Defective Tasks? Testing Response-Pattern Statistics Against Independent Audits of Agentic Coding Benchmarks"
+authors:
+  - family-names: Hassan
+    given-names: Saif
+    affiliation: Sukkur IBA University
+  - family-names: Hussain
+    given-names: Khalid
+    affiliation: Sukkur IBA University
+  - family-names: Khan
+    given-names: Umair
+    affiliation: Sakarya University; Lebanese American University
+  - family-names: Arslan
+    given-names: Muhammad
+    affiliation: National Bank of Pakistan
+license: MIT
+type: software

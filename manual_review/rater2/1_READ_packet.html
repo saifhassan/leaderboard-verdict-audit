@@ -1,0 +1,1998 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>EXP-14 hand review packet</title><style>body{font-family:Arial,sans-serif;max-width:1000px;margin:20px auto;line-height:1.4}pre{background:#f4f4f4;padding:10px;white-space:pre-wrap;word-break:break-word;border:1px solid #ddd;max-height:500px;overflow:auto}h2{border-top:3px solid #333;padding-top:12px;margin-top:40px}.m{background:#eef;padding:8px}</style></head><body><h1>Review packet, Rater B (20 tasks)</h1><p>Read 0_INSTRUCTIONS.txt first. Write your answers in 2_FILL_answers.csv, not here.</p>
+<h2>Task 1 &nbsp; matplotlib__matplotlib-23562</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/matplotlib/matplotlib/pull/23562'>https://github.com/matplotlib/matplotlib/pull/23562</a></div><h3>Task description shown to the agent</h3><pre>&#x27;Poly3DCollection&#x27; object has no attribute &#x27;_facecolors2d&#x27;
+The following minimal example demonstrates the issue:
+
+```
+import numpy as np
+import matplotlib.tri as mtri
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+y,x = np.ogrid[1:10:100j, 1:10:100j]
+z2 = np.cos(x)**3 - np.sin(y)**2
+fig = plt.figure()
+ax = fig.add_subplot(111, projection=&#x27;3d&#x27;)
+r = ax.plot_surface(x,y,z2, cmap=&#x27;hot&#x27;)
+r.get_facecolors()
+```
+
+It fails on the last line with the following traceback:
+
+```
+AttributeError                            Traceback (most recent call last)
+&lt;ipython-input-13-de0f41d662cd&gt; in &lt;module&gt;()
+----&gt; 1 r.get_facecolors()
+
+/home/oliver/.virtualenvs/mpl/local/lib/python2.7/site-packages/mpl_toolkits/mplot3d/art3d.pyc in get_facecolors(self)
+    634
+    635     def get_facecolors(self):
+--&gt; 636         return self._facecolors2d
+    637     get_facecolor = get_facecolors
+    638
+
+AttributeError: &#x27;Poly3DCollection&#x27; object has no attribute &#x27;_facecolors2d&#x27;
+```
+
+Tested with mpl versions 1.3.1 and 1.4.2.
+
+Sent here by Benjamin, from the mpl users mailing list (mail with the same title). Sorry for dumping this without more assistance, I&#x27;m not yet at a python level where I can help in debugging, I think (well, it seems daunting).
+
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/lib/mpl_toolkits/mplot3d/art3d.py b/lib/mpl_toolkits/mplot3d/art3d.py
+--- a/lib/mpl_toolkits/mplot3d/art3d.py
++++ b/lib/mpl_toolkits/mplot3d/art3d.py
+@@ -867,9 +867,19 @@ def set_alpha(self, alpha):
+         self.stale = True
+ 
+     def get_facecolor(self):
++        # docstring inherited
++        # self._facecolors2d is not initialized until do_3d_projection
++        if not hasattr(self, &#x27;_facecolors2d&#x27;):
++            self.axes.M = self.axes.get_proj()
++            self.do_3d_projection()
+         return self._facecolors2d
+ 
+     def get_edgecolor(self):
++        # docstring inherited
++        # self._edgecolors2d is not initialized until do_3d_projection
++        if not hasattr(self, &#x27;_edgecolors2d&#x27;):
++            self.axes.M = self.axes.get_proj()
++            self.do_3d_projection()
+         return self._edgecolors2d
+ 
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/lib/mpl_toolkits/tests/test_mplot3d.py b/lib/mpl_toolkits/tests/test_mplot3d.py
+--- a/lib/mpl_toolkits/tests/test_mplot3d.py
++++ b/lib/mpl_toolkits/tests/test_mplot3d.py
+@@ -1812,6 +1812,28 @@ def test_scatter_spiral():
+     fig.canvas.draw()
+ 
+ 
++def test_Poly3DCollection_get_facecolor():
++    # Smoke test to see that get_facecolor does not raise
++    # See GH#4067
++    y, x = np.ogrid[1:10:100j, 1:10:100j]
++    z2 = np.cos(x) ** 3 - np.sin(y) ** 2
++    fig = plt.figure()
++    ax = fig.add_subplot(111, projection=&#x27;3d&#x27;)
++    r = ax.plot_surface(x, y, z2, cmap=&#x27;hot&#x27;)
++    r.get_facecolor()
++
++
++def test_Poly3DCollection_get_edgecolor():
++    # Smoke test to see that get_edgecolor does not raise
++    # See GH#4067
++    y, x = np.ogrid[1:10:100j, 1:10:100j]
++    z2 = np.cos(x) ** 3 - np.sin(y) ** 2
++    fig = plt.figure()
++    ax = fig.add_subplot(111, projection=&#x27;3d&#x27;)
++    r = ax.plot_surface(x, y, z2, cmap=&#x27;hot&#x27;)
++    r.get_edgecolor()
++
++
+ @pytest.mark.parametrize(
+     &quot;vertical_axis, proj_expected, axis_lines_expected, tickdirs_expected&quot;,
+     [
+</pre>
+<h2>Task 2 &nbsp; sympy__sympy-18698</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/sympy/sympy/pull/18698'>https://github.com/sympy/sympy/pull/18698</a></div><h3>Task description shown to the agent</h3><pre>sqf and sqf_list output is not consistant
+The example below is wrong in the sense that we should have (x*_2 - 5_x + 6, 3) and not 2 factors of multiplicity 3.
+
+```
+&gt;  sqf_list(  (x**2 + 1)  * (x - 1)**2 * (x - 2)**3 * (x - 3)**3  )
+
+&gt;  (1, [(x**2 + 1, 1), (x - 1, 2), (x - 3, 3), (x - 2, 3)])
+```
+
+whereas below is correct --- one factor of multiplicity 2
+
+```
+&gt;  sqf_list( x**5 - 2*x**4 - 2*x**3 + 4*x**2 + x - 2 )
+
+&gt;  (1, [(x - 2, 1), (x**2 - 1, 2)])
+```
+
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/sympy/polys/polytools.py b/sympy/polys/polytools.py
+--- a/sympy/polys/polytools.py
++++ b/sympy/polys/polytools.py
+@@ -2,7 +2,8 @@
+ 
+ from __future__ import print_function, division
+ 
+-from functools import wraps
++from functools import wraps, reduce
++from operator import mul
+ 
+ from sympy.core import (
+     S, Basic, Expr, I, Integer, Add, Mul, Dummy, Tuple
+@@ -5905,10 +5906,7 @@ def _symbolic_factor_list(expr, opt, method):
+         if arg.is_Number:
+             coeff *= arg
+             continue
+-        if arg.is_Mul:
+-            args.extend(arg.args)
+-            continue
+-        if arg.is_Pow:
++        elif arg.is_Pow:
+             base, exp = arg.args
+             if base.is_Number and exp.is_Number:
+                 coeff *= arg
+@@ -5949,6 +5947,9 @@ def _symbolic_factor_list(expr, opt, method):
+                         other.append((f, k))
+ 
+                 factors.append((_factors_product(other), exp))
++    if method == &#x27;sqf&#x27;:
++        factors = [(reduce(mul, (f for f, _ in factors if _ == k)), k)
++                   for k in set(i for _, i in factors)]
+ 
+     return coeff, factors
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/sympy/polys/tests/test_polytools.py b/sympy/polys/tests/test_polytools.py
+--- a/sympy/polys/tests/test_polytools.py
++++ b/sympy/polys/tests/test_polytools.py
+@@ -3273,7 +3273,7 @@ def test_to_rational_coeffs():
+ def test_factor_terms():
+     # issue 7067
+     assert factor_list(x*(x + y)) == (1, [(x, 1), (x + y, 1)])
+-    assert sqf_list(x*(x + y)) == (1, [(x, 1), (x + y, 1)])
++    assert sqf_list(x*(x + y)) == (1, [(x**2 + x*y, 1)])
+ 
+ 
+ def test_as_list():
+@@ -3333,3 +3333,8 @@ def test_issue_17988():
+ def test_issue_18205():
+     assert cancel((2 + I)*(3 - I)) == 7 + I
+     assert cancel((2 + I)*(2 - I)) == 5
++
++def test_issue_8695():
++    p = (x**2 + 1) * (x - 1)**2 * (x - 2)**3 * (x - 3)**3
++    result = (1, [(x**2 + 1, 1), (x - 1, 2), (x**2 - 5*x + 6, 3)])
++    assert sqf_list(p) == result
+</pre>
+<h2>Task 3 &nbsp; django__django-14855</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/14855'>https://github.com/django/django/pull/14855</a></div><h3>Task description shown to the agent</h3><pre>Wrong URL generated by get_admin_url for readonly field in custom Admin Site
+Description
+	
+When a model containing a ForeignKey field is viewed (or edited) in a custom Admin Site, and that ForeignKey field is listed in readonly_fields, the url generated for the link is /admin/... instead of /custom-admin/....
+This appears to be caused by the following line in django.contrib.admin.helpers get_admin_url:
+url = reverse(url_name, args=[quote(remote_obj.pk)])
+Other parts of the admin use the current_app keyword parameter to identify the correct current name of the Admin Site. (See django.contrib.admin.options.ModelAdmin response_add as just one example)
+I have been able to correct this specific issue by replacing the above line with:
+url = reverse(
+	url_name,
+	args=[quote(remote_obj.pk)],
+	current_app=self.model_admin.admin_site.name
+)
+However, I don&#x27;t know if there are any side effects and I have not yet run the full suite of tests on this. Mostly looking for feedback whether I&#x27;m on the right track.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/contrib/admin/helpers.py b/django/contrib/admin/helpers.py
+--- a/django/contrib/admin/helpers.py
++++ b/django/contrib/admin/helpers.py
+@@ -209,7 +209,11 @@ def get_admin_url(self, remote_field, remote_obj):
+             remote_field.model._meta.model_name,
+         )
+         try:
+-            url = reverse(url_name, args=[quote(remote_obj.pk)])
++            url = reverse(
++                url_name,
++                args=[quote(remote_obj.pk)],
++                current_app=self.model_admin.admin_site.name,
++            )
+             return format_html(&#x27;&lt;a href=&quot;{}&quot;&gt;{}&lt;/a&gt;&#x27;, url, remote_obj)
+         except NoReverseMatch:
+             return str(remote_obj)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/admin_views/admin.py b/tests/admin_views/admin.py
+--- a/tests/admin_views/admin.py
++++ b/tests/admin_views/admin.py
+@@ -1142,6 +1142,8 @@ def get_formsets_with_inlines(self, request, obj=None):
+     raw_id_fields=[&#x27;parent&#x27;],
+ )
+ site2.register(Person, save_as_continue=False)
++site2.register(ReadOnlyRelatedField, ReadOnlyRelatedFieldAdmin)
++site2.register(Language)
+ 
+ site7 = admin.AdminSite(name=&quot;admin7&quot;)
+ site7.register(Article, ArticleAdmin2)
+diff --git a/tests/admin_views/tests.py b/tests/admin_views/tests.py
+--- a/tests/admin_views/tests.py
++++ b/tests/admin_views/tests.py
+@@ -5093,7 +5093,7 @@ def test_change_form_renders_correct_null_choice_value(self):
+         response = self.client.get(reverse(&#x27;admin:admin_views_choice_change&#x27;, args=(choice.pk,)))
+         self.assertContains(response, &#x27;&lt;div class=&quot;readonly&quot;&gt;No opinion&lt;/div&gt;&#x27;, html=True)
+ 
+-    def test_readonly_foreignkey_links(self):
++    def _test_readonly_foreignkey_links(self, admin_site):
+         &quot;&quot;&quot;
+         ForeignKey readonly fields render as links if the target model is
+         registered in admin.
+@@ -5110,10 +5110,10 @@ def test_readonly_foreignkey_links(self):
+             user=self.superuser,
+         )
+         response = self.client.get(
+-            reverse(&#x27;admin:admin_views_readonlyrelatedfield_change&#x27;, args=(obj.pk,)),
++            reverse(f&#x27;{admin_site}:admin_views_readonlyrelatedfield_change&#x27;, args=(obj.pk,)),
+         )
+         # Related ForeignKey object registered in admin.
+-        user_url = reverse(&#x27;admin:auth_user_change&#x27;, args=(self.superuser.pk,))
++        user_url = reverse(f&#x27;{admin_site}:auth_user_change&#x27;, args=(self.superuser.pk,))
+         self.assertContains(
+             response,
+             &#x27;&lt;div class=&quot;readonly&quot;&gt;&lt;a href=&quot;%s&quot;&gt;super&lt;/a&gt;&lt;/div&gt;&#x27; % user_url,
+@@ -5121,7 +5121,7 @@ def test_readonly_foreignkey_links(self):
+         )
+         # Related ForeignKey with the string primary key registered in admin.
+         language_url = reverse(
+-            &#x27;admin:admin_views_language_change&#x27;,
++            f&#x27;{admin_site}:admin_views_language_change&#x27;,
+             args=(quote(language.pk),),
+         )
+         self.assertContains(
+@@ -5132,6 +5132,12 @@ def test_readonly_foreignkey_links(self):
+         # Related ForeignKey object not registered in admin.
+         self.assertContains(response, &#x27;&lt;div class=&quot;readonly&quot;&gt;Chapter 1&lt;/div&gt;&#x27;, html=True)
+ 
++    def test_readonly_foreignkey_links_default_admin_site(self):
++        self._test_readonly_foreignkey_links(&#x27;admin&#x27;)
++
++    def test_readonly_foreignkey_links_custom_admin_site(self):
++        self._test_readonly_foreignkey_links(&#x27;namespaced_admin&#x27;)
++
+     def test_readonly_manytomany_backwards_ref(self):
+         &quot;&quot;&quot;
+         Regression test for #16433 - backwards references for related objects
+</pre>
+<h2>Task 4 &nbsp; django__django-13658</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/13658'>https://github.com/django/django/pull/13658</a></div><h3>Task description shown to the agent</h3><pre>ManagementUtility instantiates CommandParser without passing already-computed prog argument
+Description
+	
+ManagementUtility ​goes to the trouble to parse the program name from the argv it&#x27;s passed rather than from sys.argv: 
+	def __init__(self, argv=None):
+		self.argv = argv or sys.argv[:]
+		self.prog_name = os.path.basename(self.argv[0])
+		if self.prog_name == &#x27;__main__.py&#x27;:
+			self.prog_name = &#x27;python -m django&#x27;
+But then when it needs to parse --pythonpath and --settings, it ​uses the program name from sys.argv: 
+		parser = CommandParser(usage=&#x27;%(prog)s subcommand [options] [args]&#x27;, add_help=False, allow_abbrev=False)
+Above &quot;%(prog)s&quot; ​refers to sys.argv[0]. Instead, it should refer to self.prog_name. This can fixed as follows:
+		parser = CommandParser(
+			prog=self.prog_name,
+			usage=&#x27;%(prog)s subcommand [options] [args]&#x27;,
+			add_help=False,
+			allow_abbrev=False)
+I&#x27;m aware that execute_from_command_line is a private API, but it&#x27;d be really convenient for me if it worked properly in my weird embedded environment where sys.argv[0] is ​incorrectly None. If passing my own argv to execute_from_command_line avoided all the ensuing exceptions, I wouldn&#x27;t have to modify sys.argv[0] globally as I&#x27;m doing in the meantime.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/core/management/__init__.py b/django/core/management/__init__.py
+--- a/django/core/management/__init__.py
++++ b/django/core/management/__init__.py
+@@ -344,7 +344,12 @@ def execute(self):
+         # Preprocess options to extract --settings and --pythonpath.
+         # These options could affect the commands that are available, so they
+         # must be processed early.
+-        parser = CommandParser(usage=&#x27;%(prog)s subcommand [options] [args]&#x27;, add_help=False, allow_abbrev=False)
++        parser = CommandParser(
++            prog=self.prog_name,
++            usage=&#x27;%(prog)s subcommand [options] [args]&#x27;,
++            add_help=False,
++            allow_abbrev=False,
++        )
+         parser.add_argument(&#x27;--settings&#x27;)
+         parser.add_argument(&#x27;--pythonpath&#x27;)
+         parser.add_argument(&#x27;args&#x27;, nargs=&#x27;*&#x27;)  # catch-all
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/admin_scripts/tests.py b/tests/admin_scripts/tests.py
+--- a/tests/admin_scripts/tests.py
++++ b/tests/admin_scripts/tests.py
+@@ -17,7 +17,7 @@
+ from django import conf, get_version
+ from django.conf import settings
+ from django.core.management import (
+-    BaseCommand, CommandError, call_command, color,
++    BaseCommand, CommandError, call_command, color, execute_from_command_line,
+ )
+ from django.core.management.commands.loaddata import Command as LoaddataCommand
+ from django.core.management.commands.runserver import (
+@@ -31,6 +31,7 @@
+ from django.test import (
+     LiveServerTestCase, SimpleTestCase, TestCase, override_settings,
+ )
++from django.test.utils import captured_stderr, captured_stdout
+ 
+ custom_templates_dir = os.path.join(os.path.dirname(__file__), &#x27;custom_templates&#x27;)
+ 
+@@ -1867,6 +1868,20 @@ def _test(self, args, option_b=&quot;&#x27;2&#x27;&quot;):
+         )
+ 
+ 
++class ExecuteFromCommandLine(SimpleTestCase):
++    def test_program_name_from_argv(self):
++        &quot;&quot;&quot;
++        Program name is computed from the execute_from_command_line()&#x27;s argv
++        argument, not sys.argv.
++        &quot;&quot;&quot;
++        args = [&#x27;help&#x27;, &#x27;shell&#x27;]
++        with captured_stdout() as out, captured_stderr() as err:
++            with mock.patch(&#x27;sys.argv&#x27;, [None] + args):
++                execute_from_command_line([&#x27;django-admin&#x27;] + args)
++        self.assertIn(&#x27;usage: django-admin shell&#x27;, out.getvalue())
++        self.assertEqual(err.getvalue(), &#x27;&#x27;)
++
++
+ @override_settings(ROOT_URLCONF=&#x27;admin_scripts.urls&#x27;)
+ class StartProject(LiveServerTestCase, AdminScriptTestCase):
+ 
+</pre>
+<h2>Task 5 &nbsp; scikit-learn__scikit-learn-13584</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/scikit-learn/scikit-learn/pull/13584'>https://github.com/scikit-learn/scikit-learn/pull/13584</a></div><h3>Task description shown to the agent</h3><pre>bug in print_changed_only in new repr: vector values
+```python
+import sklearn
+import numpy as np
+from sklearn.linear_model import LogisticRegressionCV
+sklearn.set_config(print_changed_only=True)
+print(LogisticRegressionCV(Cs=np.array([0.1, 1])))
+```
+&gt; ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+
+ping @NicolasHug 
+
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/sklearn/utils/_pprint.py b/sklearn/utils/_pprint.py
+--- a/sklearn/utils/_pprint.py
++++ b/sklearn/utils/_pprint.py
+@@ -95,7 +95,7 @@ def _changed_params(estimator):
+     init_params = signature(init_func).parameters
+     init_params = {name: param.default for name, param in init_params.items()}
+     for k, v in params.items():
+-        if (v != init_params[k] and
++        if (repr(v) != repr(init_params[k]) and
+                 not (is_scalar_nan(init_params[k]) and is_scalar_nan(v))):
+             filtered_params[k] = v
+     return filtered_params
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/sklearn/utils/tests/test_pprint.py b/sklearn/utils/tests/test_pprint.py
+--- a/sklearn/utils/tests/test_pprint.py
++++ b/sklearn/utils/tests/test_pprint.py
+@@ -4,6 +4,7 @@
+ import numpy as np
+ 
+ from sklearn.utils._pprint import _EstimatorPrettyPrinter
++from sklearn.linear_model import LogisticRegressionCV
+ from sklearn.pipeline import make_pipeline
+ from sklearn.base import BaseEstimator, TransformerMixin
+ from sklearn.feature_selection import SelectKBest, chi2
+@@ -212,6 +213,9 @@ def test_changed_only():
+     expected = &quot;&quot;&quot;SimpleImputer()&quot;&quot;&quot;
+     assert imputer.__repr__() == expected
+ 
++    # make sure array parameters don&#x27;t throw error (see #13583)
++    repr(LogisticRegressionCV(Cs=np.array([0.1, 1])))
++
+     set_config(print_changed_only=False)
+ 
+ 
+</pre>
+<h2>Task 6 &nbsp; astropy__astropy-14182</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/astropy/astropy/pull/14182'>https://github.com/astropy/astropy/pull/14182</a></div><h3>Task description shown to the agent</h3><pre>Please support header rows in RestructuredText output
+### Description
+
+It would be great if the following would work:
+
+```Python
+&gt;&gt;&gt; from astropy.table import QTable
+&gt;&gt;&gt; import astropy.units as u
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; tbl = QTable({&#x27;wave&#x27;: [350,950]*u.nm, &#x27;response&#x27;: [0.7, 1.2]*u.count})
+&gt;&gt;&gt; tbl.write(sys.stdout,  format=&quot;ascii.rst&quot;)
+===== ========
+ wave response
+===== ========
+350.0      0.7
+950.0      1.2
+===== ========
+&gt;&gt;&gt; tbl.write(sys.stdout,  format=&quot;ascii.fixed_width&quot;, header_rows=[&quot;name&quot;, &quot;unit&quot;])
+|  wave | response |
+|    nm |       ct |
+| 350.0 |      0.7 |
+| 950.0 |      1.2 |
+&gt;&gt;&gt; tbl.write(sys.stdout,  format=&quot;ascii.rst&quot;, header_rows=[&quot;name&quot;, &quot;unit&quot;])
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/usr/lib/python3/dist-packages/astropy/table/connect.py&quot;, line 129, in __call__
+    self.registry.write(instance, *args, **kwargs)
+  File &quot;/usr/lib/python3/dist-packages/astropy/io/registry/core.py&quot;, line 369, in write
+    return writer(data, *args, **kwargs)
+  File &quot;/usr/lib/python3/dist-packages/astropy/io/ascii/connect.py&quot;, line 26, in io_write
+    return write(table, filename, **kwargs)
+  File &quot;/usr/lib/python3/dist-packages/astropy/io/ascii/ui.py&quot;, line 856, in write
+    writer = get_writer(Writer=Writer, fast_writer=fast_writer, **kwargs)
+  File &quot;/usr/lib/python3/dist-packages/astropy/io/ascii/ui.py&quot;, line 800, in get_writer
+    writer = core._get_writer(Writer, fast_writer, **kwargs)
+  File &quot;/usr/lib/python3/dist-packages/astropy/io/ascii/core.py&quot;, line 1719, in _get_writer
+    writer = Writer(**writer_kwargs)
+TypeError: RST.__init__() got an unexpected keyword argument &#x27;header_rows&#x27;
+```
+
+
+### Additional context
+
+RestructuredText output is a great way to fill autogenerated documentation with content, so having this flexible makes the life easier `:-)`
+
+
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/astropy/io/ascii/rst.py b/astropy/io/ascii/rst.py
+--- a/astropy/io/ascii/rst.py
++++ b/astropy/io/ascii/rst.py
+@@ -27,7 +27,6 @@ def get_fixedwidth_params(self, line):
+ 
+ 
+ class SimpleRSTData(FixedWidthData):
+-    start_line = 3
+     end_line = -1
+     splitter_class = FixedWidthTwoLineDataSplitter
+ 
+@@ -39,12 +38,29 @@ class RST(FixedWidth):
+ 
+     Example::
+ 
+-        ==== ===== ======
+-        Col1  Col2  Col3
+-        ==== ===== ======
+-          1    2.3  Hello
+-          2    4.5  Worlds
+-        ==== ===== ======
++      &gt;&gt;&gt; from astropy.table import QTable
++      &gt;&gt;&gt; import astropy.units as u
++      &gt;&gt;&gt; import sys
++      &gt;&gt;&gt; tbl = QTable({&quot;wave&quot;: [350, 950] * u.nm, &quot;response&quot;: [0.7, 1.2] * u.count})
++      &gt;&gt;&gt; tbl.write(sys.stdout,  format=&quot;ascii.rst&quot;)
++      ===== ========
++       wave response
++      ===== ========
++      350.0      0.7
++      950.0      1.2
++      ===== ========
++
++    Like other fixed-width formats, when writing a table you can provide ``header_rows``
++    to specify a list of table rows to output as the header.  For example::
++
++      &gt;&gt;&gt; tbl.write(sys.stdout,  format=&quot;ascii.rst&quot;, header_rows=[&#x27;name&#x27;, &#x27;unit&#x27;])
++      ===== ========
++       wave response
++         nm       ct
++      ===== ========
++      350.0      0.7
++      950.0      1.2
++      ===== ========
+ 
+     Currently there is no support for reading tables which utilize continuation lines,
+     or for ones which define column spans through the use of an additional
+@@ -57,10 +73,15 @@ class RST(FixedWidth):
+     data_class = SimpleRSTData
+     header_class = SimpleRSTHeader
+ 
+-    def __init__(self):
+-        super().__init__(delimiter_pad=None, bookend=False)
++    def __init__(self, header_rows=None):
++        super().__init__(delimiter_pad=None, bookend=False, header_rows=header_rows)
+ 
+     def write(self, lines):
+         lines = super().write(lines)
+-        lines = [lines[1]] + lines + [lines[1]]
++        idx = len(self.header.header_rows)
++        lines = [lines[idx]] + lines + [lines[idx]]
+         return lines
++
++    def read(self, table):
++        self.data.start_line = 2 + len(self.header.header_rows)
++        return super().read(table)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/astropy/io/ascii/tests/test_rst.py b/astropy/io/ascii/tests/test_rst.py
+--- a/astropy/io/ascii/tests/test_rst.py
++++ b/astropy/io/ascii/tests/test_rst.py
+@@ -2,7 +2,11 @@
+ 
+ from io import StringIO
+ 
++import numpy as np
++
++import astropy.units as u
+ from astropy.io import ascii
++from astropy.table import QTable
+ 
+ from .common import assert_almost_equal, assert_equal
+ 
+@@ -185,3 +189,27 @@ def test_write_normal():
+ ==== ========= ==== ====
+ &quot;&quot;&quot;,
+     )
++
++
++def test_rst_with_header_rows():
++    &quot;&quot;&quot;Round-trip a table with header_rows specified&quot;&quot;&quot;
++    lines = [
++        &quot;======= ======== ====&quot;,
++        &quot;   wave response ints&quot;,
++        &quot;     nm       ct     &quot;,
++        &quot;float64  float32 int8&quot;,
++        &quot;======= ======== ====&quot;,
++        &quot;  350.0      1.0    1&quot;,
++        &quot;  950.0      2.0    2&quot;,
++        &quot;======= ======== ====&quot;,
++    ]
++    tbl = QTable.read(lines, format=&quot;ascii.rst&quot;, header_rows=[&quot;name&quot;, &quot;unit&quot;, &quot;dtype&quot;])
++    assert tbl[&quot;wave&quot;].unit == u.nm
++    assert tbl[&quot;response&quot;].unit == u.ct
++    assert tbl[&quot;wave&quot;].dtype == np.float64
++    assert tbl[&quot;response&quot;].dtype == np.float32
++    assert tbl[&quot;ints&quot;].dtype == np.int8
++
++    out = StringIO()
++    tbl.write(out, format=&quot;ascii.rst&quot;, header_rows=[&quot;name&quot;, &quot;unit&quot;, &quot;dtype&quot;])
++    assert out.getvalue().splitlines() == lines
+</pre>
+<h2>Task 7 &nbsp; matplotlib__matplotlib-25442</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/matplotlib/matplotlib/pull/25442'>https://github.com/matplotlib/matplotlib/pull/25442</a></div><h3>Task description shown to the agent</h3><pre>[Bug]: Attribute Error combining matplotlib 3.7.1 and mplcursor on data selection
+### Bug summary
+
+If you combine mplcursor and matplotlib 3.7.1, you&#x27;ll get an `AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;canvas&#x27;` after clicking a few data points. Henceforth, selecting a new data point will trigger the same traceback. Otherwise, it works fine. 
+
+### Code for reproduction
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import mplcursors as mpl
+
+x = np.arange(1, 11)    
+y1 = x
+
+plt.scatter(x,y1)
+
+mpl.cursor()
+plt.show()
+```
+
+
+### Actual outcome
+
+```
+Traceback (most recent call last):
+  File &quot;C:\Users\MrAni\Python\miniconda3\lib\site-packages\matplotlib\cbook\__init__.py&quot;, line 304, in process
+    func(*args, **kwargs)
+  File &quot;C:\Users\MrAni\Python\miniconda3\lib\site-packages\matplotlib\offsetbox.py&quot;, line 1550, in on_release
+    if self._check_still_parented() and self.got_artist:
+  File &quot;C:\Users\MrAni\Python\miniconda3\lib\site-packages\matplotlib\offsetbox.py&quot;, line 1560, in _check_still_parented
+    self.disconnect()
+  File &quot;C:\Users\MrAni\Python\miniconda3\lib\site-packages\matplotlib\offsetbox.py&quot;, line 1568, in disconnect
+    self.canvas.mpl_disconnect(cid)
+  File &quot;C:\Users\MrAni\Python\miniconda3\lib\site-packages\matplotlib\offsetbox.py&quot;, line 1517, in &lt;lambda&gt;
+    canvas = property(lambda self: self.ref_artist.figure.canvas)
+AttributeError: &#x27;NoneType&#x27; object has no attribute &#x27;canvas&#x27;
+```
+
+### Expected outcome
+
+No terminal output
+
+### Additional information
+
+Using matplotlib 3.7.0 or lower works fine. Using a conda install or pip install doesn&#x27;t affect the output. 
+
+### Operating system
+
+Windows 11 and Windwos 10 
+
+### Matplotlib Version
+
+3.7.1
+
+### Matplotlib Backend
+
+QtAgg
+
+### Python version
+
+3.9.16
+
+### Jupyter version
+
+_No response_
+
+### Installation
+
+conda
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/lib/matplotlib/offsetbox.py b/lib/matplotlib/offsetbox.py
+--- a/lib/matplotlib/offsetbox.py
++++ b/lib/matplotlib/offsetbox.py
+@@ -1500,16 +1500,23 @@ def __init__(self, ref_artist, use_blit=False):
+             ref_artist.set_picker(True)
+         self.got_artist = False
+         self._use_blit = use_blit and self.canvas.supports_blit
+-        self.cids = [
+-            self.canvas.callbacks._connect_picklable(
+-                &#x27;pick_event&#x27;, self.on_pick),
+-            self.canvas.callbacks._connect_picklable(
+-                &#x27;button_release_event&#x27;, self.on_release),
++        callbacks = ref_artist.figure._canvas_callbacks
++        self._disconnectors = [
++            functools.partial(
++                callbacks.disconnect, callbacks._connect_picklable(name, func))
++            for name, func in [
++                (&quot;pick_event&quot;, self.on_pick),
++                (&quot;button_release_event&quot;, self.on_release),
++                (&quot;motion_notify_event&quot;, self.on_motion),
++            ]
+         ]
+ 
+     # A property, not an attribute, to maintain picklability.
+     canvas = property(lambda self: self.ref_artist.figure.canvas)
+ 
++    cids = property(lambda self: [
++        disconnect.args[0] for disconnect in self._disconnectors[:2]])
++
+     def on_motion(self, evt):
+         if self._check_still_parented() and self.got_artist:
+             dx = evt.x - self.mouse_x
+@@ -1536,16 +1543,12 @@ def on_pick(self, evt):
+                 self.ref_artist.draw(
+                     self.ref_artist.figure._get_renderer())
+                 self.canvas.blit()
+-            self._c1 = self.canvas.callbacks._connect_picklable(
+-                &quot;motion_notify_event&quot;, self.on_motion)
+             self.save_offset()
+ 
+     def on_release(self, event):
+         if self._check_still_parented() and self.got_artist:
+             self.finalize_offset()
+             self.got_artist = False
+-            self.canvas.mpl_disconnect(self._c1)
+-
+             if self._use_blit:
+                 self.ref_artist.set_animated(False)
+ 
+@@ -1558,14 +1561,8 @@ def _check_still_parented(self):
+ 
+     def disconnect(self):
+         &quot;&quot;&quot;Disconnect the callbacks.&quot;&quot;&quot;
+-        for cid in self.cids:
+-            self.canvas.mpl_disconnect(cid)
+-        try:
+-            c1 = self._c1
+-        except AttributeError:
+-            pass
+-        else:
+-            self.canvas.mpl_disconnect(c1)
++        for disconnector in self._disconnectors:
++            disconnector()
+ 
+     def save_offset(self):
+         pass
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/lib/matplotlib/tests/test_offsetbox.py b/lib/matplotlib/tests/test_offsetbox.py
+--- a/lib/matplotlib/tests/test_offsetbox.py
++++ b/lib/matplotlib/tests/test_offsetbox.py
+@@ -450,3 +450,11 @@ def test_paddedbox():
+     pb = PaddedBox(ta, pad=15, draw_frame=True)
+     ab = AnchoredOffsetbox(&#x27;lower right&#x27;, child=pb)
+     ax.add_artist(ab)
++
++
++def test_remove_draggable():
++    fig, ax = plt.subplots()
++    an = ax.annotate(&quot;foo&quot;, (.5, .5))
++    an.draggable(True)
++    an.remove()
++    MouseEvent(&quot;button_release_event&quot;, fig.canvas, 1, 1)._process()
+</pre>
+<h2>Task 8 &nbsp; django__django-15498</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/15498'>https://github.com/django/django/pull/15498</a></div><h3>Task description shown to the agent</h3><pre>Fix handling empty string for If-Modified-Since header
+Description
+	
+Empty string used to be ignored for If-Modified-Since header, but now raises exception since d6aff369ad3.
+Fix handling empty string for If-Modified-Since header
+Description
+	
+Empty string used to be ignored for If-Modified-Since header, but now raises exception since d6aff369ad3.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/views/static.py b/django/views/static.py
+--- a/django/views/static.py
++++ b/django/views/static.py
+@@ -129,12 +129,14 @@ def was_modified_since(header=None, mtime=0, size=0):
+         if header is None:
+             raise ValueError
+         matches = re.match(r&quot;^([^;]+)(; length=([0-9]+))?$&quot;, header, re.IGNORECASE)
++        if matches is None:
++            raise ValueError
+         header_mtime = parse_http_date(matches[1])
+         header_len = matches[3]
+         if header_len and int(header_len) != size:
+             raise ValueError
+         if int(mtime) &gt; header_mtime:
+             raise ValueError
+-    except (AttributeError, ValueError, OverflowError):
++    except (ValueError, OverflowError):
+         return True
+     return False
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/view_tests/tests/test_static.py b/tests/view_tests/tests/test_static.py
+--- a/tests/view_tests/tests/test_static.py
++++ b/tests/view_tests/tests/test_static.py
+@@ -191,3 +191,6 @@ def test_was_modified_since_fp(self):
+         mtime = 1343416141.107817
+         header = http_date(mtime)
+         self.assertFalse(was_modified_since(header, mtime))
++
++    def test_was_modified_since_empty_string(self):
++        self.assertTrue(was_modified_since(header=&quot;&quot;, mtime=1))
+</pre>
+<h2>Task 9 &nbsp; django__django-12453</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/12453'>https://github.com/django/django/pull/12453</a></div><h3>Task description shown to the agent</h3><pre>`TransactionTestCase.serialized_rollback` fails to restore objects due to ordering constraints
+Description
+	
+I hit this problem in a fairly complex projet and haven&#x27;t had the time to write a minimal reproduction case. I think it can be understood just by inspecting the code so I&#x27;m going to describe it while I have it in mind.
+Setting serialized_rollback = True on a TransactionTestCase triggers ​rollback emulation. In practice, for each database:
+BaseDatabaseCreation.create_test_db calls connection._test_serialized_contents = connection.creation.serialize_db_to_string()
+TransactionTestCase._fixture_setup calls connection.creation.deserialize_db_from_string(connection._test_serialized_contents)
+(The actual code isn&#x27;t written that way; it&#x27;s equivalent but the symmetry is less visible.)
+serialize_db_to_string orders models with serializers.sort_dependencies and serializes them. The sorting algorithm only deals with natural keys. It doesn&#x27;t do anything to order models referenced by foreign keys before models containing said foreign keys. That wouldn&#x27;t be possible in general because circular foreign keys are allowed.
+deserialize_db_from_string deserializes and saves models without wrapping in a transaction. This can result in integrity errors if an instance containing a foreign key is saved before the instance it references. I&#x27;m suggesting to fix it as follows:
+diff --git a/django/db/backends/base/creation.py b/django/db/backends/base/creation.py
+index bca8376..7bed2be 100644
+--- a/django/db/backends/base/creation.py
++++ b/django/db/backends/base/creation.py
+@@ -4,7 +4,7 @@ import time
+ from django.apps import apps
+ from django.conf import settings
+ from django.core import serializers
+-from django.db import router
++from django.db import router, transaction
+ from django.utils.six import StringIO
+ from django.utils.six.moves import input
+ 
+@@ -128,8 +128,9 @@ class BaseDatabaseCreation(object):
+		 the serialize_db_to_string method.
+		 &quot;&quot;&quot;
+		 data = StringIO(data)
+-		for obj in serializers.deserialize(&quot;json&quot;, data, using=self.connection.alias):
+-			obj.save()
++		with transaction.atomic(using=self.connection.alias):
++			for obj in serializers.deserialize(&quot;json&quot;, data, using=self.connection.alias):
++				obj.save()
+ 
+	 def _get_database_display_str(self, verbosity, database_name):
+		 &quot;&quot;&quot;
+Note that loaddata doesn&#x27;t have this problem because it wraps everything in a transaction:
+	def handle(self, *fixture_labels, **options):
+		# ...
+		with transaction.atomic(using=self.using):
+			self.loaddata(fixture_labels)
+		# ...
+This suggest that the transaction was just forgotten in the implementation of deserialize_db_from_string.
+It should be possible to write a deterministic test for this bug because the order in which serialize_db_to_string serializes models depends on the app registry, and the app registry uses OrderedDict to store apps and models in a deterministic order.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/db/backends/base/creation.py b/django/db/backends/base/creation.py
+--- a/django/db/backends/base/creation.py
++++ b/django/db/backends/base/creation.py
+@@ -6,6 +6,7 @@
+ from django.conf import settings
+ from django.core import serializers
+ from django.db import router
++from django.db.transaction import atomic
+ 
+ # The prefix to put on the default database name when creating
+ # the test database.
+@@ -126,8 +127,16 @@ def deserialize_db_from_string(self, data):
+         the serialize_db_to_string() method.
+         &quot;&quot;&quot;
+         data = StringIO(data)
+-        for obj in serializers.deserialize(&quot;json&quot;, data, using=self.connection.alias):
+-            obj.save()
++        # Load data in a transaction to handle forward references and cycles.
++        with atomic(using=self.connection.alias):
++            # Disable constraint checks, because some databases (MySQL) doesn&#x27;t
++            # support deferred checks.
++            with self.connection.constraint_checks_disabled():
++                for obj in serializers.deserialize(&#x27;json&#x27;, data, using=self.connection.alias):
++                    obj.save()
++            # Manually check for any invalid keys that might have been added,
++            # because constraint checks were disabled.
++            self.connection.check_constraints()
+ 
+     def _get_database_display_str(self, verbosity, database_name):
+         &quot;&quot;&quot;
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/backends/base/test_creation.py b/tests/backends/base/test_creation.py
+--- a/tests/backends/base/test_creation.py
++++ b/tests/backends/base/test_creation.py
+@@ -7,6 +7,8 @@
+ )
+ from django.test import SimpleTestCase
+ 
++from ..models import Object, ObjectReference
++
+ 
+ def get_connection_copy():
+     # Get a copy of the default connection. (Can&#x27;t use django.db.connection
+@@ -73,3 +75,29 @@ def test_migrate_test_setting_true(self, mocked_migrate, mocked_ensure_connectio
+         finally:
+             with mock.patch.object(creation, &#x27;_destroy_test_db&#x27;):
+                 creation.destroy_test_db(old_database_name, verbosity=0)
++
++
++class TestDeserializeDbFromString(SimpleTestCase):
++    databases = {&#x27;default&#x27;}
++
++    def test_circular_reference(self):
++        # deserialize_db_from_string() handles circular references.
++        data = &quot;&quot;&quot;
++        [
++            {
++                &quot;model&quot;: &quot;backends.object&quot;,
++                &quot;pk&quot;: 1,
++                &quot;fields&quot;: {&quot;obj_ref&quot;: 1, &quot;related_objects&quot;: []}
++            },
++            {
++                &quot;model&quot;: &quot;backends.objectreference&quot;,
++                &quot;pk&quot;: 1,
++                &quot;fields&quot;: {&quot;obj&quot;: 1}
++            }
++        ]
++        &quot;&quot;&quot;
++        connection.creation.deserialize_db_from_string(data)
++        obj = Object.objects.get()
++        obj_ref = ObjectReference.objects.get()
++        self.assertEqual(obj.obj_ref, obj_ref)
++        self.assertEqual(obj_ref.obj, obj)
+diff --git a/tests/backends/models.py b/tests/backends/models.py
+--- a/tests/backends/models.py
++++ b/tests/backends/models.py
+@@ -89,6 +89,7 @@ def __str__(self):
+ 
+ class Object(models.Model):
+     related_objects = models.ManyToManyField(&quot;self&quot;, db_constraint=False, symmetrical=False)
++    obj_ref = models.ForeignKey(&#x27;ObjectReference&#x27;, models.CASCADE, null=True)
+ 
+     def __str__(self):
+         return str(self.id)
+</pre>
+<h2>Task 10 &nbsp; django__django-14411</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/14411'>https://github.com/django/django/pull/14411</a></div><h3>Task description shown to the agent</h3><pre>Label for ReadOnlyPasswordHashWidget points to non-labelable element.
+Description
+	 
+		(last modified by David Sanders)
+	 
+In the admin, the label element for the ReadOnlyPasswordHashWidget widget has a &#x27;for&#x27; attribute which points to a non-labelable element, since the widget just renders text, not an input. There&#x27;s no labelable element for the widget, so the label shouldn&#x27;t have a &#x27;for&#x27; attribute.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/contrib/auth/forms.py b/django/contrib/auth/forms.py
+--- a/django/contrib/auth/forms.py
++++ b/django/contrib/auth/forms.py
+@@ -50,6 +50,9 @@ def get_context(self, name, value, attrs):
+         context[&#x27;summary&#x27;] = summary
+         return context
+ 
++    def id_for_label(self, id_):
++        return None
++
+ 
+ class ReadOnlyPasswordHashField(forms.Field):
+     widget = ReadOnlyPasswordHashWidget
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/auth_tests/test_forms.py b/tests/auth_tests/test_forms.py
+--- a/tests/auth_tests/test_forms.py
++++ b/tests/auth_tests/test_forms.py
+@@ -13,6 +13,7 @@
+ from django.core import mail
+ from django.core.exceptions import ValidationError
+ from django.core.mail import EmailMultiAlternatives
++from django.forms import forms
+ from django.forms.fields import CharField, Field, IntegerField
+ from django.test import SimpleTestCase, TestCase, override_settings
+ from django.utils import translation
+@@ -1025,6 +1026,18 @@ def test_readonly_field_has_changed(self):
+         self.assertIs(field.disabled, True)
+         self.assertFalse(field.has_changed(&#x27;aaa&#x27;, &#x27;bbb&#x27;))
+ 
++    def test_label(self):
++        &quot;&quot;&quot;
++        ReadOnlyPasswordHashWidget doesn&#x27;t contain a for attribute in the
++        &lt;label&gt; because it doesn&#x27;t have any labelable elements.
++        &quot;&quot;&quot;
++        class TestForm(forms.Form):
++            hash_field = ReadOnlyPasswordHashField()
++
++        bound_field = TestForm()[&#x27;hash_field&#x27;]
++        self.assertEqual(bound_field.field.widget.id_for_label(&#x27;id&#x27;), None)
++        self.assertEqual(bound_field.label_tag(), &#x27;&lt;label&gt;Hash field:&lt;/label&gt;&#x27;)
++
+ 
+ class AdminPasswordChangeFormTest(TestDataMixin, TestCase):
+ 
+</pre>
+<h2>Task 11 &nbsp; sympy__sympy-21379</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/sympy/sympy/pull/21379'>https://github.com/sympy/sympy/pull/21379</a></div><h3>Task description shown to the agent</h3><pre>Unexpected `PolynomialError` when using simple `subs()` for particular expressions
+I am seeing weird behavior with `subs` for particular expressions with hyperbolic sinusoids with piecewise arguments. When applying `subs`, I obtain an unexpected `PolynomialError`. For context, I was umbrella-applying a casting from int to float of all int atoms for a bunch of random expressions before using a tensorflow lambdify to avoid potential tensorflow type errors. You can pretend the expression below has a `+ 1` at the end, but below is the MWE that I could produce.
+
+See the expression below, and the conditions in which the exception arises.
+
+Sympy version: 1.8.dev
+
+```python
+from sympy import *
+from sympy.core.cache import clear_cache
+
+x, y, z = symbols(&#x27;x y z&#x27;)
+
+clear_cache()
+expr = exp(sinh(Piecewise((x, y &gt; x), (y, True)) / z))
+# This works fine
+expr.subs({1: 1.0})
+
+clear_cache()
+x, y, z = symbols(&#x27;x y z&#x27;, real=True)
+expr = exp(sinh(Piecewise((x, y &gt; x), (y, True)) / z))
+# This fails with &quot;PolynomialError: Piecewise generators do not make sense&quot;
+expr.subs({1: 1.0})  # error
+# Now run it again (isympy...) w/o clearing cache and everything works as expected without error
+expr.subs({1: 1.0})
+```
+
+I am not really sure where the issue is, but I think it has something to do with the order of assumptions in this specific type of expression. Here is what I found-
+
+- The error only (AFAIK) happens with `cosh` or `tanh` in place of `sinh`, otherwise it succeeds
+- The error goes away if removing the division by `z`
+- The error goes away if removing `exp` (but stays for most unary functions, `sin`, `log`, etc.)
+- The error only happens with real symbols for `x` and `y` (`z` does not have to be real)
+
+Not too sure how to debug this one.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/sympy/core/mod.py b/sympy/core/mod.py
+--- a/sympy/core/mod.py
++++ b/sympy/core/mod.py
+@@ -40,6 +40,7 @@ def eval(cls, p, q):
+         from sympy.core.mul import Mul
+         from sympy.core.singleton import S
+         from sympy.core.exprtools import gcd_terms
++        from sympy.polys.polyerrors import PolynomialError
+         from sympy.polys.polytools import gcd
+ 
+         def doit(p, q):
+@@ -166,10 +167,13 @@ def doit(p, q):
+         # XXX other possibilities?
+ 
+         # extract gcd; any further simplification should be done by the user
+-        G = gcd(p, q)
+-        if G != 1:
+-            p, q = [
+-                gcd_terms(i/G, clear=False, fraction=False) for i in (p, q)]
++        try:
++            G = gcd(p, q)
++            if G != 1:
++                p, q = [gcd_terms(i/G, clear=False, fraction=False)
++                        for i in (p, q)]
++        except PolynomialError:  # issue 21373
++            G = S.One
+         pwas, qwas = p, q
+ 
+         # simplify terms
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/sympy/core/tests/test_arit.py b/sympy/core/tests/test_arit.py
+--- a/sympy/core/tests/test_arit.py
++++ b/sympy/core/tests/test_arit.py
+@@ -1913,6 +1913,16 @@ def test_Mod():
+     assert Mod(x, y).rewrite(floor) == x - y*floor(x/y)
+     assert ((x - Mod(x, y))/y).rewrite(floor) == floor(x/y)
+ 
++    # issue 21373
++    from sympy.functions.elementary.trigonometric import sinh
++    from sympy.functions.elementary.piecewise import Piecewise
++
++    x_r, y_r = symbols(&#x27;x_r y_r&#x27;, real=True)
++    (Piecewise((x_r, y_r &gt; x_r), (y_r, True)) / z) % 1
++    expr = exp(sinh(Piecewise((x_r, y_r &gt; x_r), (y_r, True)) / z))
++    expr.subs({1: 1.0})
++    sinh(Piecewise((x_r, y_r &gt; x_r), (y_r, True)) * z ** -1.0).is_zero
++
+ 
+ def test_Mod_Pow():
+     # modular exponentiation
+</pre>
+<h2>Task 12 &nbsp; django__django-15252</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/15252'>https://github.com/django/django/pull/15252</a></div><h3>Task description shown to the agent</h3><pre>MigrationRecorder does not obey db_router allow_migrate rules
+Description
+	
+Hi,
+We have a multi-db setup. We have one connection that is for the django project, and several connections that talk to other dbs for information (ie models with managed = False). Django should only create tables in the first connection, never in any of the other connections. We have a simple router that does the following: 
+class Router(object):
+	def allow_migrate(self, db, model):
+		if db == &#x27;default&#x27;:
+			return True
+		return False
+Current Behaviour
+We run our functional tests and the migrate command is called against each connection when the test databases are created (see django/test/runner.py, setup_databases, line 300-ish, which calls django/db/backends/creation.py, create_test_db, line 377-ish)
+When this migrate runs, it tries to apply our migrations, which tries to record that a migration has been applied (see django/db/migrations/executor.py, apply_migration, which has several calls to self.recorder.record_applied). 
+The first thing that record_applied does is a call to self.ensure_schema() (see django/db/migrations/recorder.py, record_applied, lien 66-ish). 
+ensure_schema checks to see if the Migration model is in the tables in the connection. If it does not find the table then it tries to create the table. 
+I believe that this is incorrect behaviour when a db_router has been provided. If using the router above, my expectation would be that the table is not created on any connection other than the &#x27;default&#x27; connection. Looking at the other methods on the MigrationRecorder, I would expect that there will be similar issues with applied_migrations and record_unapplied.
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/db/migrations/executor.py b/django/db/migrations/executor.py
+--- a/django/db/migrations/executor.py
++++ b/django/db/migrations/executor.py
+@@ -96,8 +96,12 @@ def migrate(self, targets, plan=None, state=None, fake=False, fake_initial=False
+         (un)applied and in a second step run all the database operations.
+         &quot;&quot;&quot;
+         # The django_migrations table must be present to record applied
+-        # migrations.
+-        self.recorder.ensure_schema()
++        # migrations, but don&#x27;t create it if there are no migrations to apply.
++        if plan == []:
++            if not self.recorder.has_table():
++                return self._create_project_state(with_applied_migrations=False)
++        else:
++            self.recorder.ensure_schema()
+ 
+         if plan is None:
+             plan = self.migration_plan(targets)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/backends/base/test_creation.py b/tests/backends/base/test_creation.py
+--- a/tests/backends/base/test_creation.py
++++ b/tests/backends/base/test_creation.py
+@@ -57,12 +57,12 @@ def test_custom_test_name_with_test_prefix(self):
+ @mock.patch.object(connection, &#x27;ensure_connection&#x27;)
+ @mock.patch.object(connection, &#x27;prepare_database&#x27;)
+ @mock.patch(&#x27;django.db.migrations.recorder.MigrationRecorder.has_table&#x27;, return_value=False)
+-@mock.patch(&#x27;django.db.migrations.executor.MigrationExecutor.migrate&#x27;)
+ @mock.patch(&#x27;django.core.management.commands.migrate.Command.sync_apps&#x27;)
+ class TestDbCreationTests(SimpleTestCase):
+     available_apps = [&#x27;backends.base.app_unmigrated&#x27;]
+ 
+-    def test_migrate_test_setting_false(self, mocked_sync_apps, mocked_migrate, *mocked_objects):
++    @mock.patch(&#x27;django.db.migrations.executor.MigrationExecutor.migrate&#x27;)
++    def test_migrate_test_setting_false(self, mocked_migrate, mocked_sync_apps, *mocked_objects):
+         test_connection = get_connection_copy()
+         test_connection.settings_dict[&#x27;TEST&#x27;][&#x27;MIGRATE&#x27;] = False
+         creation = test_connection.creation_class(test_connection)
+@@ -86,7 +86,32 @@ def test_migrate_test_setting_false(self, mocked_sync_apps, mocked_migrate, *moc
+             with mock.patch.object(creation, &#x27;_destroy_test_db&#x27;):
+                 creation.destroy_test_db(old_database_name, verbosity=0)
+ 
+-    def test_migrate_test_setting_true(self, mocked_sync_apps, mocked_migrate, *mocked_objects):
++    @mock.patch(&#x27;django.db.migrations.executor.MigrationRecorder.ensure_schema&#x27;)
++    def test_migrate_test_setting_false_ensure_schema(
++        self, mocked_ensure_schema, mocked_sync_apps, *mocked_objects,
++    ):
++        test_connection = get_connection_copy()
++        test_connection.settings_dict[&#x27;TEST&#x27;][&#x27;MIGRATE&#x27;] = False
++        creation = test_connection.creation_class(test_connection)
++        if connection.vendor == &#x27;oracle&#x27;:
++            # Don&#x27;t close connection on Oracle.
++            creation.connection.close = mock.Mock()
++        old_database_name = test_connection.settings_dict[&#x27;NAME&#x27;]
++        try:
++            with mock.patch.object(creation, &#x27;_create_test_db&#x27;):
++                creation.create_test_db(verbosity=0, autoclobber=True, serialize=False)
++            # The django_migrations table is not created.
++            mocked_ensure_schema.assert_not_called()
++            # App is synced.
++            mocked_sync_apps.assert_called()
++            mocked_args, _ = mocked_sync_apps.call_args
++            self.assertEqual(mocked_args[1], {&#x27;app_unmigrated&#x27;})
++        finally:
++            with mock.patch.object(creation, &#x27;_destroy_test_db&#x27;):
++                creation.destroy_test_db(old_database_name, verbosity=0)
++
++    @mock.patch(&#x27;django.db.migrations.executor.MigrationExecutor.migrate&#x27;)
++    def test_migrate_test_setting_true(self, mocked_migrate, mocked_sync_apps, *mocked_objects):
+         test_connection = get_connection_copy()
+         test_connection.settings_dict[&#x27;TEST&#x27;][&#x27;MIGRATE&#x27;] = True
+         creation = test_connection.creation_class(test_connection)
+@@ -109,6 +134,7 @@ def test_migrate_test_setting_true(self, mocked_sync_apps, mocked_migrate, *mock
+                 creation.destroy_test_db(old_database_name, verbosity=0)
+ 
+     @mock.patch.dict(os.environ, {&#x27;RUNNING_DJANGOS_TEST_SUITE&#x27;: &#x27;&#x27;})
++    @mock.patch(&#x27;django.db.migrations.executor.MigrationExecutor.migrate&#x27;)
+     @mock.patch.object(BaseDatabaseCreation, &#x27;mark_expected_failures_and_skips&#x27;)
+     def test_mark_expected_failures_and_skips_call(self, mark_expected_failures_and_skips, *mocked_objects):
+         &quot;&quot;&quot;
+diff --git a/tests/migrations/test_executor.py b/tests/migrations/test_executor.py
+--- a/tests/migrations/test_executor.py
++++ b/tests/migrations/test_executor.py
+@@ -759,6 +759,17 @@ def apply(self, project_state, schema_editor, collect_sql=False):
+             False,
+         )
+ 
++    @mock.patch.object(MigrationRecorder, &#x27;has_table&#x27;, return_value=False)
++    def test_migrate_skips_schema_creation(self, mocked_has_table):
++        &quot;&quot;&quot;
++        The django_migrations table is not created if there are no migrations
++        to record.
++        &quot;&quot;&quot;
++        executor = MigrationExecutor(connection)
++        # 0 queries, since the query for has_table is being mocked.
++        with self.assertNumQueries(0):
++            executor.migrate([], plan=[])
++
+ 
+ class FakeLoader:
+     def __init__(self, graph, applied):
+</pre>
+<h2>Task 13 &nbsp; mwaskom__seaborn-3190</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/mwaskom/seaborn/pull/3190'>https://github.com/mwaskom/seaborn/pull/3190</a></div><h3>Task description shown to the agent</h3><pre>Color mapping fails with boolean data
+```python
+so.Plot([&quot;a&quot;, &quot;b&quot;], [1, 2], color=[True, False]).add(so.Bar())
+```
+```python-traceback
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+...
+File ~/code/seaborn/seaborn/_core/plot.py:841, in Plot._plot(self, pyplot)
+    838 plotter._compute_stats(self, layers)
+    840 # Process scale spec for semantic variables and coordinates computed by stat
+--&gt; 841 plotter._setup_scales(self, common, layers)
+    843 # TODO Remove these after updating other methods
+    844 # ---- Maybe have debug= param that attaches these when True?
+    845 plotter._data = common
+
+File ~/code/seaborn/seaborn/_core/plot.py:1252, in Plotter._setup_scales(self, p, common, layers, variables)
+   1250     self._scales[var] = Scale._identity()
+   1251 else:
+-&gt; 1252     self._scales[var] = scale._setup(var_df[var], prop)
+   1254 # Everything below here applies only to coordinate variables
+   1255 # We additionally skip it when we&#x27;re working with a value
+   1256 # that is derived from a coordinate we&#x27;ve already processed.
+   1257 # e.g., the Stat consumed y and added ymin/ymax. In that case,
+   1258 # we&#x27;ve already setup the y scale and ymin/max are in scale space.
+   1259 if axis is None or (var != coord and coord in p._variables):
+
+File ~/code/seaborn/seaborn/_core/scales.py:351, in ContinuousBase._setup(self, data, prop, axis)
+    349 vmin, vmax = axis.convert_units((vmin, vmax))
+    350 a = forward(vmin)
+--&gt; 351 b = forward(vmax) - forward(vmin)
+    353 def normalize(x):
+    354     return (x - a) / b
+
+TypeError: numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead.
+```
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/seaborn/_core/scales.py b/seaborn/_core/scales.py
+--- a/seaborn/_core/scales.py
++++ b/seaborn/_core/scales.py
+@@ -346,7 +346,7 @@ def _setup(
+                 vmin, vmax = data.min(), data.max()
+             else:
+                 vmin, vmax = new.norm
+-            vmin, vmax = axis.convert_units((vmin, vmax))
++            vmin, vmax = map(float, axis.convert_units((vmin, vmax)))
+             a = forward(vmin)
+             b = forward(vmax) - forward(vmin)
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/_core/test_scales.py b/tests/_core/test_scales.py
+--- a/tests/_core/test_scales.py
++++ b/tests/_core/test_scales.py
+@@ -90,6 +90,12 @@ def test_interval_with_range_norm_and_transform(self, x):
+         s = Continuous((2, 3), (10, 100), &quot;log&quot;)._setup(x, IntervalProperty())
+         assert_array_equal(s(x), [1, 2, 3])
+ 
++    def test_interval_with_bools(self):
++
++        x = pd.Series([True, False, False])
++        s = Continuous()._setup(x, IntervalProperty())
++        assert_array_equal(s(x), [1, 0, 0])
++
+     def test_color_defaults(self, x):
+ 
+         cmap = color_palette(&quot;ch:&quot;, as_cmap=True)
+</pre>
+<h2>Task 14 &nbsp; pydata__xarray-4094</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/pydata/xarray/pull/4094'>https://github.com/pydata/xarray/pull/4094</a></div><h3>Task description shown to the agent</h3><pre>to_unstacked_dataset broken for single-dim variables
+&lt;!-- A short summary of the issue, if appropriate --&gt;
+
+
+#### MCVE Code Sample
+
+```python
+arr = xr.DataArray(
+     np.arange(3),
+     coords=[(&quot;x&quot;, [0, 1, 2])],
+ )
+data = xr.Dataset({&quot;a&quot;: arr, &quot;b&quot;: arr})
+stacked = data.to_stacked_array(&#x27;y&#x27;, sample_dims=[&#x27;x&#x27;])
+unstacked = stacked.to_unstacked_dataset(&#x27;y&#x27;)
+# MergeError: conflicting values for variable &#x27;y&#x27; on objects to be combined. You can skip this check by specifying compat=&#x27;override&#x27;.
+```
+
+#### Expected Output
+A working roundtrip.
+
+#### Problem Description
+I need to stack a bunch of variables and later unstack them again, however this doesn&#x27;t work if the variables only have a single dimension.
+
+#### Versions
+
+&lt;details&gt;&lt;summary&gt;Output of &lt;tt&gt;xr.show_versions()&lt;/tt&gt;&lt;/summary&gt;
+
+INSTALLED VERSIONS
+------------------
+commit: None
+python: 3.7.3 (default, Mar 27 2019, 22:11:17) 
+[GCC 7.3.0]
+python-bits: 64
+OS: Linux
+OS-release: 4.15.0-96-generic
+machine: x86_64
+processor: x86_64
+byteorder: little
+LC_ALL: None
+LANG: en_GB.UTF-8
+LOCALE: en_GB.UTF-8
+libhdf5: 1.10.4
+libnetcdf: 4.6.2
+
+xarray: 0.15.1
+pandas: 1.0.3
+numpy: 1.17.3
+scipy: 1.3.1
+netCDF4: 1.4.2
+pydap: None
+h5netcdf: None
+h5py: 2.10.0
+Nio: None
+zarr: None
+cftime: 1.0.4.2
+nc_time_axis: None
+PseudoNetCDF: None
+rasterio: None
+cfgrib: None
+iris: None
+bottleneck: None
+dask: 2.10.1
+distributed: 2.10.0
+matplotlib: 3.1.1
+cartopy: None
+seaborn: 0.10.0
+numbagg: None
+setuptools: 41.0.0
+pip: 19.0.3
+conda: 4.8.3
+pytest: 5.3.5
+IPython: 7.9.0
+sphinx: None
+
+
+&lt;/details&gt;
+
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/xarray/core/dataarray.py b/xarray/core/dataarray.py
+--- a/xarray/core/dataarray.py
++++ b/xarray/core/dataarray.py
+@@ -1961,7 +1961,7 @@ def to_unstacked_dataset(self, dim, level=0):
+         # pull variables out of datarray
+         data_dict = {}
+         for k in variables:
+-            data_dict[k] = self.sel({variable_dim: k}).squeeze(drop=True)
++            data_dict[k] = self.sel({variable_dim: k}, drop=True).squeeze(drop=True)
+ 
+         # unstacked dataset
+         return Dataset(data_dict)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/xarray/tests/test_dataset.py b/xarray/tests/test_dataset.py
+--- a/xarray/tests/test_dataset.py
++++ b/xarray/tests/test_dataset.py
+@@ -3031,6 +3031,14 @@ def test_to_stacked_array_dtype_dims(self):
+         assert y.dims == (&quot;x&quot;, &quot;features&quot;)
+ 
+     def test_to_stacked_array_to_unstacked_dataset(self):
++
++        # single dimension: regression test for GH4049
++        arr = xr.DataArray(np.arange(3), coords=[(&quot;x&quot;, [0, 1, 2])])
++        data = xr.Dataset({&quot;a&quot;: arr, &quot;b&quot;: arr})
++        stacked = data.to_stacked_array(&quot;y&quot;, sample_dims=[&quot;x&quot;])
++        unstacked = stacked.to_unstacked_dataset(&quot;y&quot;)
++        assert_identical(unstacked, data)
++
+         # make a two dimensional dataset
+         a, b = create_test_stacked_array()
+         D = xr.Dataset({&quot;a&quot;: a, &quot;b&quot;: b})
+</pre>
+<h2>Task 15 &nbsp; sphinx-doc__sphinx-11445</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/sphinx-doc/sphinx/pull/11445'>https://github.com/sphinx-doc/sphinx/pull/11445</a></div><h3>Task description shown to the agent</h3><pre>Using rst_prolog removes top level headings containing a domain directive
+### Describe the bug
+
+If `rst_prolog` is set, then any documents that contain a domain directive as the first heading (eg `:mod:`) do not render the heading correctly or include the heading in the toctree.
+
+In the example below, if the heading of `docs/mypackage.rst` were `mypackage2` instead of `:mod:mypackage2` then the heading displays correctly.
+Similarly, if you do not set `rst_prolog` then the heading will display correctly.
+
+This appears to have been broken for some time because I can reproduce it in v4.0.0 of Sphinx
+
+### How to Reproduce
+
+```bash
+$ sphinx-quickstart --no-sep --project mypackage --author me -v 0.1.0 --release 0.1.0 --language en docs
+$ echo -e &#x27;Welcome\n=======\n\n.. toctree::\n\n   mypackage\n&#x27; &gt; docs/index.rst
+$ echo -e &#x27;:mod:`mypackage2`\n=================\n\nContent\n\nSubheading\n----------\n&#x27; &gt; docs/mypackage.rst
+$ echo -e &#x27;rst_prolog = &quot;&quot;&quot;\n.. |psf| replace:: Python Software Foundation\n&quot;&quot;&quot;\n&#x27; &gt;&gt; docs/conf.py
+$ sphinx-build -b html . _build
+$ grep &#x27;mypackage2&#x27; docs/_build/index.html
+```
+
+`docs/index.rst`:
+
+```rst
+Welcome
+=======
+
+.. toctree::
+
+   mypackage
+```
+
+`docs/mypackage.rst`:
+
+```rst
+:mod:`mypackage2`
+=================
+
+Content
+
+Subheading
+----------
+```
+
+### Environment Information
+
+```text
+Platform:              linux; (Linux-6.3.2-arch1-1-x86_64-with-glibc2.37)
+Python version:        3.11.3 (main, Apr  5 2023, 15:52:25) [GCC 12.2.1 20230201])
+Python implementation: CPython
+Sphinx version:        7.1.0+/d3c91f951
+Docutils version:      0.20.1
+Jinja2 version:        3.1.2
+Pygments version:      2.15.1
+```
+
+
+### Sphinx extensions
+
+```python
+[]
+```
+
+
+### Additional context
+
+_No response_
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/sphinx/util/rst.py b/sphinx/util/rst.py
+--- a/sphinx/util/rst.py
++++ b/sphinx/util/rst.py
+@@ -10,22 +10,17 @@
+ 
+ from docutils.parsers.rst import roles
+ from docutils.parsers.rst.languages import en as english
++from docutils.parsers.rst.states import Body
+ from docutils.statemachine import StringList
+ from docutils.utils import Reporter
+-from jinja2 import Environment
++from jinja2 import Environment, pass_environment
+ 
+ from sphinx.locale import __
+ from sphinx.util import docutils, logging
+ 
+-try:
+-    from jinja2.utils import pass_environment
+-except ImportError:
+-    from jinja2 import environmentfilter as pass_environment
+-
+-
+ logger = logging.getLogger(__name__)
+ 
+-docinfo_re = re.compile(&#x27;:\\w+:.*?&#x27;)
++FIELD_NAME_RE = re.compile(Body.patterns[&#x27;field_marker&#x27;])
+ symbols_re = re.compile(r&#x27;([!-\-/:-@\[-`{-~])&#x27;)  # symbols without dot(0x2e)
+ SECTIONING_CHARS = [&#x27;=&#x27;, &#x27;-&#x27;, &#x27;~&#x27;]
+ 
+@@ -80,7 +75,7 @@ def prepend_prolog(content: StringList, prolog: str) -&gt; None:
+     if prolog:
+         pos = 0
+         for line in content:
+-            if docinfo_re.match(line):
++            if FIELD_NAME_RE.match(line):
+                 pos += 1
+             else:
+                 break
+@@ -91,6 +86,7 @@ def prepend_prolog(content: StringList, prolog: str) -&gt; None:
+             pos += 1
+ 
+         # insert prolog (after docinfo if exists)
++        lineno = 0
+         for lineno, line in enumerate(prolog.splitlines()):
+             content.insert(pos + lineno, line, &#x27;&lt;rst_prolog&gt;&#x27;, lineno)
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/test_util_rst.py b/tests/test_util_rst.py
+--- a/tests/test_util_rst.py
++++ b/tests/test_util_rst.py
+@@ -78,6 +78,61 @@ def test_prepend_prolog_without_CR(app):
+                                       (&#x27;dummy.rst&#x27;, 1, &#x27;Sphinx is a document generator&#x27;)]
+ 
+ 
++def test_prepend_prolog_with_roles_in_sections(app):
++    prolog = &#x27;this is rst_prolog\nhello reST!&#x27;
++    content = StringList([&#x27;:title: test of SphinxFileInput&#x27;,
++                          &#x27;:author: Sphinx team&#x27;,
++                          &#x27;&#x27;,  # this newline is required
++                          &#x27;:mod:`foo`&#x27;,
++                          &#x27;----------&#x27;,
++                          &#x27;&#x27;,
++                          &#x27;hello&#x27;],
++                         &#x27;dummy.rst&#x27;)
++    prepend_prolog(content, prolog)
++
++    assert list(content.xitems()) == [(&#x27;dummy.rst&#x27;, 0, &#x27;:title: test of SphinxFileInput&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 1, &#x27;:author: Sphinx team&#x27;),
++                                      (&#x27;&lt;generated&gt;&#x27;, 0, &#x27;&#x27;),
++                                      (&#x27;&lt;rst_prolog&gt;&#x27;, 0, &#x27;this is rst_prolog&#x27;),
++                                      (&#x27;&lt;rst_prolog&gt;&#x27;, 1, &#x27;hello reST!&#x27;),
++                                      (&#x27;&lt;generated&gt;&#x27;, 0, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 2, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 3, &#x27;:mod:`foo`&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 4, &#x27;----------&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 5, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 6, &#x27;hello&#x27;)]
++
++
++def test_prepend_prolog_with_roles_in_sections_with_newline(app):
++    # prologue with trailing line break
++    prolog = &#x27;this is rst_prolog\nhello reST!\n&#x27;
++    content = StringList([&#x27;:mod:`foo`&#x27;, &#x27;-&#x27; * 10, &#x27;&#x27;, &#x27;hello&#x27;], &#x27;dummy.rst&#x27;)
++    prepend_prolog(content, prolog)
++
++    assert list(content.xitems()) == [(&#x27;&lt;rst_prolog&gt;&#x27;, 0, &#x27;this is rst_prolog&#x27;),
++                                      (&#x27;&lt;rst_prolog&gt;&#x27;, 1, &#x27;hello reST!&#x27;),
++                                      (&#x27;&lt;generated&gt;&#x27;, 0, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 0, &#x27;:mod:`foo`&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 1, &#x27;----------&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 2, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 3, &#x27;hello&#x27;)]
++
++
++def test_prepend_prolog_with_roles_in_sections_without_newline(app):
++    # prologue with no trailing line break
++    prolog = &#x27;this is rst_prolog\nhello reST!&#x27;
++    content = StringList([&#x27;:mod:`foo`&#x27;, &#x27;-&#x27; * 10, &#x27;&#x27;, &#x27;hello&#x27;], &#x27;dummy.rst&#x27;)
++    prepend_prolog(content, prolog)
++
++    assert list(content.xitems()) == [(&#x27;&lt;rst_prolog&gt;&#x27;, 0, &#x27;this is rst_prolog&#x27;),
++                                      (&#x27;&lt;rst_prolog&gt;&#x27;, 1, &#x27;hello reST!&#x27;),
++                                      (&#x27;&lt;generated&gt;&#x27;, 0, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 0, &#x27;:mod:`foo`&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 1, &#x27;----------&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 2, &#x27;&#x27;),
++                                      (&#x27;dummy.rst&#x27;, 3, &#x27;hello&#x27;)]
++
++
+ def test_textwidth():
+     assert textwidth(&#x27;Hello&#x27;) == 5
+     assert textwidth(&#x27;русский язык&#x27;) == 12
+</pre>
+<h2>Task 16 &nbsp; pytest-dev__pytest-5227</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/pytest-dev/pytest/pull/5227'>https://github.com/pytest-dev/pytest/pull/5227</a></div><h3>Task description shown to the agent</h3><pre>Improve default logging format
+Currently it is:
+
+&gt; DEFAULT_LOG_FORMAT = &quot;%(filename)-25s %(lineno)4d %(levelname)-8s %(message)s&quot;
+
+I think `name` (module name) would be very useful here, instead of just the base filename.
+
+(It might also be good to have the relative path there (maybe at the end), but it is usually still very long (but e.g. `$VIRTUAL_ENV` could be substituted therein))
+
+Currently it would look like this:
+```
+utils.py                   114 DEBUG    (0.000) SELECT &quot;app_url&quot;.&quot;id&quot;, &quot;app_url&quot;.&quot;created&quot;, &quot;app_url&quot;.&quot;url&quot; FROM &quot;app_url&quot; WHERE &quot;app_url&quot;.&quot;id&quot; = 2; args=(2,)
+multipart.py               604 DEBUG    Calling on_field_start with no data
+```
+
+
+Using `DEFAULT_LOG_FORMAT = &quot;%(levelname)-8s %(name)s:%(filename)s:%(lineno)d %(message)s&quot;` instead:
+
+```
+DEBUG    django.db.backends:utils.py:114 (0.000) SELECT &quot;app_url&quot;.&quot;id&quot;, &quot;app_url&quot;.&quot;created&quot;, &quot;app_url&quot;.&quot;url&quot; FROM &quot;app_url&quot; WHERE &quot;app_url&quot;.&quot;id&quot; = 2; args=(2,)
+DEBUG    multipart.multipart:multipart.py:604 Calling on_field_start with no data
+```
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/src/_pytest/logging.py b/src/_pytest/logging.py
+--- a/src/_pytest/logging.py
++++ b/src/_pytest/logging.py
+@@ -15,7 +15,7 @@
+ from _pytest.config import create_terminal_writer
+ from _pytest.pathlib import Path
+ 
+-DEFAULT_LOG_FORMAT = &quot;%(filename)-25s %(lineno)4d %(levelname)-8s %(message)s&quot;
++DEFAULT_LOG_FORMAT = &quot;%(levelname)-8s %(name)s:%(filename)s:%(lineno)d %(message)s&quot;
+ DEFAULT_LOG_DATE_FORMAT = &quot;%H:%M:%S&quot;
+ 
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/testing/logging/test_reporting.py b/testing/logging/test_reporting.py
+--- a/testing/logging/test_reporting.py
++++ b/testing/logging/test_reporting.py
+@@ -248,7 +248,7 @@ def test_log_cli():
+             [
+                 &quot;test_log_cli_enabled_disabled.py::test_log_cli &quot;,
+                 &quot;*-- live log call --*&quot;,
+-                &quot;test_log_cli_enabled_disabled.py* CRITICAL critical message logged by test&quot;,
++                &quot;CRITICAL *test_log_cli_enabled_disabled.py* critical message logged by test&quot;,
+                 &quot;PASSED*&quot;,
+             ]
+         )
+@@ -282,7 +282,7 @@ def test_log_cli(request):
+     result.stdout.fnmatch_lines(
+         [
+             &quot;test_log_cli_default_level.py::test_log_cli &quot;,
+-            &quot;test_log_cli_default_level.py*WARNING message will be shown*&quot;,
++            &quot;WARNING*test_log_cli_default_level.py* message will be shown*&quot;,
+         ]
+     )
+     assert &quot;INFO message won&#x27;t be shown&quot; not in result.stdout.str()
+@@ -523,7 +523,7 @@ def test_log_1(fix):
+     )
+     assert (
+         re.search(
+-            r&quot;(.+)live log teardown(.+)\n(.+)WARNING(.+)\n(.+)WARNING(.+)&quot;,
++            r&quot;(.+)live log teardown(.+)\nWARNING(.+)\nWARNING(.+)&quot;,
+             result.stdout.str(),
+             re.MULTILINE,
+         )
+@@ -531,7 +531,7 @@ def test_log_1(fix):
+     )
+     assert (
+         re.search(
+-            r&quot;(.+)live log finish(.+)\n(.+)WARNING(.+)\n(.+)WARNING(.+)&quot;,
++            r&quot;(.+)live log finish(.+)\nWARNING(.+)\nWARNING(.+)&quot;,
+             result.stdout.str(),
+             re.MULTILINE,
+         )
+@@ -565,7 +565,7 @@ def test_log_cli(request):
+     # fnmatch_lines does an assertion internally
+     result.stdout.fnmatch_lines(
+         [
+-            &quot;test_log_cli_level.py*This log message will be shown&quot;,
++            &quot;*test_log_cli_level.py*This log message will be shown&quot;,
+             &quot;PASSED&quot;,  # &#x27;PASSED&#x27; on its own line because the log message prints a new line
+         ]
+     )
+@@ -579,7 +579,7 @@ def test_log_cli(request):
+     # fnmatch_lines does an assertion internally
+     result.stdout.fnmatch_lines(
+         [
+-            &quot;test_log_cli_level.py* This log message will be shown&quot;,
++            &quot;*test_log_cli_level.py* This log message will be shown&quot;,
+             &quot;PASSED&quot;,  # &#x27;PASSED&#x27; on its own line because the log message prints a new line
+         ]
+     )
+@@ -615,7 +615,7 @@ def test_log_cli(request):
+     # fnmatch_lines does an assertion internally
+     result.stdout.fnmatch_lines(
+         [
+-            &quot;test_log_cli_ini_level.py* This log message will be shown&quot;,
++            &quot;*test_log_cli_ini_level.py* This log message will be shown&quot;,
+             &quot;PASSED&quot;,  # &#x27;PASSED&#x27; on its own line because the log message prints a new line
+         ]
+     )
+</pre>
+<h2>Task 17 &nbsp; sympy__sympy-14817</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/sympy/sympy/pull/14817'>https://github.com/sympy/sympy/pull/14817</a></div><h3>Task description shown to the agent</h3><pre>Error pretty printing MatAdd
+```py
+&gt;&gt;&gt; pprint(MatrixSymbol(&#x27;x&#x27;, n, n) + MatrixSymbol(&#x27;y*&#x27;, n, n))
+Traceback (most recent call last):
+  File &quot;./sympy/core/sympify.py&quot;, line 368, in sympify
+    expr = parse_expr(a, local_dict=locals, transformations=transformations, evaluate=evaluate)
+  File &quot;./sympy/parsing/sympy_parser.py&quot;, line 950, in parse_expr
+    return eval_expr(code, local_dict, global_dict)
+  File &quot;./sympy/parsing/sympy_parser.py&quot;, line 863, in eval_expr
+    code, global_dict, local_dict)  # take local objects in preference
+  File &quot;&lt;string&gt;&quot;, line 1
+    Symbol (&#x27;y&#x27; )*
+                 ^
+SyntaxError: unexpected EOF while parsing
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;./sympy/printing/pretty/pretty.py&quot;, line 2371, in pretty_print
+    use_unicode_sqrt_char=use_unicode_sqrt_char))
+  File &quot;./sympy/printing/pretty/pretty.py&quot;, line 2331, in pretty
+    return pp.doprint(expr)
+  File &quot;./sympy/printing/pretty/pretty.py&quot;, line 62, in doprint
+    return self._print(expr).render(**self._settings)
+  File &quot;./sympy/printing/printer.py&quot;, line 274, in _print
+    return getattr(self, printmethod)(expr, *args, **kwargs)
+  File &quot;./sympy/printing/pretty/pretty.py&quot;, line 828, in _print_MatAdd
+    if S(item.args[0]).is_negative:
+  File &quot;./sympy/core/sympify.py&quot;, line 370, in sympify
+    raise SympifyError(&#x27;could not parse %r&#x27; % a, exc)
+sympy.core.sympify.SympifyError: Sympify of expression &#x27;could not parse &#x27;y*&#x27;&#x27; failed, because of exception being raised:
+SyntaxError: unexpected EOF while parsing (&lt;string&gt;, line 1)
+```
+
+The code shouldn&#x27;t be using sympify to handle string arguments from MatrixSymbol.
+
+I don&#x27;t even understand what the code is doing. Why does it omit the `+` when the first argument is negative? This seems to assume that the arguments of MatAdd have a certain form, and that they will always print a certain way if they are negative. 
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/sympy/printing/pretty/pretty.py b/sympy/printing/pretty/pretty.py
+--- a/sympy/printing/pretty/pretty.py
++++ b/sympy/printing/pretty/pretty.py
+@@ -825,7 +825,8 @@ def _print_MatAdd(self, expr):
+             if s is None:
+                 s = pform     # First element
+             else:
+-                if S(item.args[0]).is_negative:
++                coeff = item.as_coeff_mmul()[0]
++                if _coeff_isneg(S(coeff)):
+                     s = prettyForm(*stringPict.next(s, &#x27; &#x27;))
+                     pform = self._print(item)
+                 else:
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/sympy/printing/pretty/tests/test_pretty.py b/sympy/printing/pretty/tests/test_pretty.py
+--- a/sympy/printing/pretty/tests/test_pretty.py
++++ b/sympy/printing/pretty/tests/test_pretty.py
+@@ -6094,11 +6094,16 @@ def test_MatrixSymbol_printing():
+     A = MatrixSymbol(&quot;A&quot;, 3, 3)
+     B = MatrixSymbol(&quot;B&quot;, 3, 3)
+     C = MatrixSymbol(&quot;C&quot;, 3, 3)
+-
+     assert pretty(-A*B*C) == &quot;-A*B*C&quot;
+     assert pretty(A - B) == &quot;-B + A&quot;
+     assert pretty(A*B*C - A*B - B*C) == &quot;-A*B -B*C + A*B*C&quot;
+ 
++    # issue #14814
++    x = MatrixSymbol(&#x27;x&#x27;, n, n)
++    y = MatrixSymbol(&#x27;y*&#x27;, n, n)
++    assert pretty(x + y) == &quot;x + y*&quot;
++    assert pretty(-a*x + -2*y*y) == &quot;-a*x -2*y**y*&quot;
++
+ 
+ def test_degree_printing():
+     expr1 = 90*degree
+</pre>
+<h2>Task 18 &nbsp; matplotlib__matplotlib-23476</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/matplotlib/matplotlib/pull/23476'>https://github.com/matplotlib/matplotlib/pull/23476</a></div><h3>Task description shown to the agent</h3><pre>[Bug]: DPI of a figure is doubled after unpickling on M1 Mac
+### Bug summary
+
+When a figure is unpickled, it&#x27;s dpi is doubled. This behaviour happens every time and if done in a loop it can cause an `OverflowError`.
+
+### Code for reproduction
+
+```python
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import pickle
+import platform
+
+print(matplotlib.get_backend())
+print(&#x27;Matplotlib ver:&#x27;, matplotlib.__version__)
+print(&#x27;Platform:&#x27;, platform.platform())
+print(&#x27;System:&#x27;, platform.system())
+print(&#x27;Release:&#x27;, platform.release())
+print(&#x27;Python ver:&#x27;, platform.python_version())
+
+
+def dump_load_get_dpi(fig):
+    with open(&#x27;sinus.pickle&#x27;,&#x27;wb&#x27;) as file:
+        pickle.dump(fig, file)
+
+    with open(&#x27;sinus.pickle&#x27;, &#x27;rb&#x27;) as blob:
+        fig2 = pickle.load(blob)
+    return fig2, fig2.dpi
+
+
+def run():
+    fig = plt.figure()
+    x = np.linspace(0,2*np.pi)
+    y = np.sin(x)
+
+    for i in range(32):
+        print(f&#x27;{i}: {fig.dpi}&#x27;)
+        fig, dpi = dump_load_get_dpi(fig)
+
+
+if __name__ == &#x27;__main__&#x27;:
+    run()
+```
+
+
+### Actual outcome
+
+```
+MacOSX
+Matplotlib ver: 3.5.2
+Platform: macOS-12.4-arm64-arm-64bit
+System: Darwin
+Release: 21.5.0
+Python ver: 3.9.12
+0: 200.0
+1: 400.0
+2: 800.0
+3: 1600.0
+4: 3200.0
+5: 6400.0
+6: 12800.0
+7: 25600.0
+8: 51200.0
+9: 102400.0
+10: 204800.0
+11: 409600.0
+12: 819200.0
+13: 1638400.0
+14: 3276800.0
+15: 6553600.0
+16: 13107200.0
+17: 26214400.0
+18: 52428800.0
+19: 104857600.0
+20: 209715200.0
+21: 419430400.0
+Traceback (most recent call last):
+  File &quot;/Users/wsykala/projects/matplotlib/example.py&quot;, line 34, in &lt;module&gt;
+    run()
+  File &quot;/Users/wsykala/projects/matplotlib/example.py&quot;, line 30, in run
+    fig, dpi = dump_load_get_dpi(fig)
+  File &quot;/Users/wsykala/projects/matplotlib/example.py&quot;, line 20, in dump_load_get_dpi
+    fig2 = pickle.load(blob)
+  File &quot;/Users/wsykala/miniconda3/envs/playground/lib/python3.9/site-packages/matplotlib/figure.py&quot;, line 2911, in __setstate__
+    mgr = plt._backend_mod.new_figure_manager_given_figure(num, self)
+  File &quot;/Users/wsykala/miniconda3/envs/playground/lib/python3.9/site-packages/matplotlib/backend_bases.py&quot;, line 3499, in new_figure_manager_given_figure
+    canvas = cls.FigureCanvas(figure)
+  File &quot;/Users/wsykala/miniconda3/envs/playground/lib/python3.9/site-packages/matplotlib/backends/backend_macosx.py&quot;, line 32, in __init__
+    _macosx.FigureCanvas.__init__(self, width, height)
+OverflowError: signed integer is greater than maximum
+```
+
+### Expected outcome
+
+```
+MacOSX
+Matplotlib ver: 3.5.2
+Platform: macOS-12.4-arm64-arm-64bit
+System: Darwin
+Release: 21.5.0
+Python ver: 3.9.12
+0: 200.0
+1: 200.0
+2: 200.0
+3: 200.0
+4: 200.0
+5: 200.0
+6: 200.0
+7: 200.0
+8: 200.0
+9: 200.0
+10: 200.0
+11: 200.0
+12: 200.0
+13: 200.0
+14: 200.0
+15: 200.0
+16: 200.0
+17: 200.0
+18: 200.0
+19: 200.0
+20: 200.0
+21: 200.0
+22: 200.0
+```
+
+### Additional information
+
+This seems to happen only on M1 MacBooks and the version of python doesn&#x27;t matter.
+
+### Operating system
+
+OS/X
+
+### Matplotlib Version
+
+3.5.2
+
+### Matplotlib Backend
+
+MacOSX
+
+### Python version
+
+3.9.12
+
+### Jupyter version
+
+_No response_
+
+### Installation
+
+pip
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/lib/matplotlib/figure.py b/lib/matplotlib/figure.py
+--- a/lib/matplotlib/figure.py
++++ b/lib/matplotlib/figure.py
+@@ -3023,6 +3023,9 @@ def __getstate__(self):
+         # Set cached renderer to None -- it can&#x27;t be pickled.
+         state[&quot;_cachedRenderer&quot;] = None
+ 
++        # discard any changes to the dpi due to pixel ratio changes
++        state[&quot;_dpi&quot;] = state.get(&#x27;_original_dpi&#x27;, state[&#x27;_dpi&#x27;])
++
+         # add version information to the state
+         state[&#x27;__mpl_version__&#x27;] = mpl.__version__
+ 
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/lib/matplotlib/tests/test_figure.py b/lib/matplotlib/tests/test_figure.py
+--- a/lib/matplotlib/tests/test_figure.py
++++ b/lib/matplotlib/tests/test_figure.py
+@@ -2,6 +2,7 @@
+ from datetime import datetime
+ import io
+ from pathlib import Path
++import pickle
+ import platform
+ from threading import Timer
+ from types import SimpleNamespace
+@@ -1380,3 +1381,11 @@ def test_deepcopy():
+ 
+     assert ax.get_xlim() == (1e-1, 1e2)
+     assert fig2.axes[0].get_xlim() == (0, 1)
++
++
++def test_unpickle_with_device_pixel_ratio():
++    fig = Figure(dpi=42)
++    fig.canvas._set_device_pixel_ratio(7)
++    assert fig.dpi == 42*7
++    fig2 = pickle.loads(pickle.dumps(fig))
++    assert fig2.dpi == 42
+</pre>
+<h2>Task 19 &nbsp; django__django-15213</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/django/django/pull/15213'>https://github.com/django/django/pull/15213</a></div><h3>Task description shown to the agent</h3><pre>ExpressionWrapper for ~Q(pk__in=[]) crashes.
+Description
+	 
+		(last modified by Stefan Brand)
+	 
+Problem Description
+I&#x27;m reducing some Q objects (similar to what is described in ticket:32554. Everything is fine for the case where the result is ExpressionWrapper(Q(pk__in=[])). However, when I reduce to ExpressionWrapper(~Q(pk__in=[])) the query breaks.
+Symptoms
+Working for ExpressionWrapper(Q(pk__in=[]))
+print(queryset.annotate(foo=ExpressionWrapper(Q(pk__in=[]), output_field=BooleanField())).values(&quot;foo&quot;).query)
+SELECT 0 AS &quot;foo&quot; FROM &quot;table&quot;
+Not working for ExpressionWrapper(~Q(pk__in=[]))
+print(queryset.annotate(foo=ExpressionWrapper(~Q(pk__in=[]), output_field=BooleanField())).values(&quot;foo&quot;).query)
+SELECT AS &quot;foo&quot; FROM &quot;table&quot;
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/django/db/models/fields/__init__.py b/django/db/models/fields/__init__.py
+--- a/django/db/models/fields/__init__.py
++++ b/django/db/models/fields/__init__.py
+@@ -994,6 +994,15 @@ def formfield(self, **kwargs):
+             defaults = {&#x27;form_class&#x27;: form_class, &#x27;required&#x27;: False}
+         return super().formfield(**{**defaults, **kwargs})
+ 
++    def select_format(self, compiler, sql, params):
++        sql, params = super().select_format(compiler, sql, params)
++        # Filters that match everything are handled as empty strings in the
++        # WHERE clause, but in SELECT or GROUP BY list they must use a
++        # predicate that&#x27;s always True.
++        if sql == &#x27;&#x27;:
++            sql = &#x27;1&#x27;
++        return sql, params
++
+ 
+ class CharField(Field):
+     description = _(&quot;String (up to %(max_length)s)&quot;)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/tests/annotations/tests.py b/tests/annotations/tests.py
+--- a/tests/annotations/tests.py
++++ b/tests/annotations/tests.py
+@@ -210,6 +210,26 @@ def test_empty_expression_annotation(self):
+         self.assertEqual(len(books), Book.objects.count())
+         self.assertTrue(all(not book.selected for book in books))
+ 
++    def test_full_expression_annotation(self):
++        books = Book.objects.annotate(
++            selected=ExpressionWrapper(~Q(pk__in=[]), output_field=BooleanField()),
++        )
++        self.assertEqual(len(books), Book.objects.count())
++        self.assertTrue(all(book.selected for book in books))
++
++    def test_full_expression_annotation_with_aggregation(self):
++        qs = Book.objects.filter(isbn=&#x27;159059725&#x27;).annotate(
++            selected=ExpressionWrapper(~Q(pk__in=[]), output_field=BooleanField()),
++            rating_count=Count(&#x27;rating&#x27;),
++        )
++        self.assertEqual([book.rating_count for book in qs], [1])
++
++    def test_aggregate_over_full_expression_annotation(self):
++        qs = Book.objects.annotate(
++            selected=ExpressionWrapper(~Q(pk__in=[]), output_field=BooleanField()),
++        ).aggregate(Sum(&#x27;selected&#x27;))
++        self.assertEqual(qs[&#x27;selected__sum&#x27;], Book.objects.count())
++
+     def test_empty_queryset_annotation(self):
+         qs = Author.objects.annotate(
+             empty=Subquery(Author.objects.values(&#x27;id&#x27;).none())
+</pre>
+<h2>Task 20 &nbsp; matplotlib__matplotlib-23299</h2><div class='m'><b>Pull request (open only if you need more context):</b> <a href='https://github.com/matplotlib/matplotlib/pull/23299'>https://github.com/matplotlib/matplotlib/pull/23299</a></div><h3>Task description shown to the agent</h3><pre>[Bug]: get_backend() clears figures from Gcf.figs if they were created under rc_context
+### Bug summary
+
+calling `matplotlib.get_backend()` removes all figures from `Gcf` if the *first* figure in `Gcf.figs` was created in an `rc_context`.
+
+### Code for reproduction
+
+```python
+import matplotlib.pyplot as plt
+from matplotlib import get_backend, rc_context
+
+# fig1 = plt.figure()  # &lt;- UNCOMMENT THIS LINE AND IT WILL WORK
+# plt.ion()            # &lt;- ALTERNATIVELY, UNCOMMENT THIS LINE AND IT WILL ALSO WORK
+with rc_context():
+    fig2 = plt.figure()
+before = f&#x27;{id(plt._pylab_helpers.Gcf)} {plt._pylab_helpers.Gcf.figs!r}&#x27;
+get_backend()
+after = f&#x27;{id(plt._pylab_helpers.Gcf)} {plt._pylab_helpers.Gcf.figs!r}&#x27;
+
+assert before == after, &#x27;\n&#x27; + before + &#x27;\n&#x27; + after
+```
+
+
+### Actual outcome
+
+```
+---------------------------------------------------------------------------
+AssertionError                            Traceback (most recent call last)
+&lt;ipython-input-1-fa4d099aa289&gt; in &lt;cell line: 11&gt;()
+      9 after = f&#x27;{id(plt._pylab_helpers.Gcf)} {plt._pylab_helpers.Gcf.figs!r}&#x27;
+     10 
+---&gt; 11 assert before == after, &#x27;\n&#x27; + before + &#x27;\n&#x27; + after
+     12 
+
+AssertionError: 
+94453354309744 OrderedDict([(1, &lt;matplotlib.backends.backend_qt.FigureManagerQT object at 0x7fb33e26c220&gt;)])
+94453354309744 OrderedDict()
+```
+
+### Expected outcome
+
+The figure should not be missing from `Gcf`.  Consequences of this are, e.g, `plt.close(fig2)` doesn&#x27;t work because `Gcf.destroy_fig()` can&#x27;t find it.
+
+### Additional information
+
+_No response_
+
+### Operating system
+
+Xubuntu
+
+### Matplotlib Version
+
+3.5.2
+
+### Matplotlib Backend
+
+QtAgg
+
+### Python version
+
+Python 3.10.4
+
+### Jupyter version
+
+n/a
+
+### Installation
+
+conda
+</pre><h3>Reference fix (gold patch)</h3><pre>diff --git a/lib/matplotlib/__init__.py b/lib/matplotlib/__init__.py
+--- a/lib/matplotlib/__init__.py
++++ b/lib/matplotlib/__init__.py
+@@ -1059,6 +1059,8 @@ def rc_context(rc=None, fname=None):
+     &quot;&quot;&quot;
+     Return a context manager for temporarily changing rcParams.
+ 
++    The :rc:`backend` will not be reset by the context manager.
++
+     Parameters
+     ----------
+     rc : dict
+@@ -1087,7 +1089,8 @@ def rc_context(rc=None, fname=None):
+              plt.plot(x, y)  # uses &#x27;print.rc&#x27;
+ 
+     &quot;&quot;&quot;
+-    orig = rcParams.copy()
++    orig = dict(rcParams.copy())
++    del orig[&#x27;backend&#x27;]
+     try:
+         if fname:
+             rc_file(fname)
+</pre><h3>Tests used for grading (test patch)</h3><pre>diff --git a/lib/matplotlib/tests/test_rcparams.py b/lib/matplotlib/tests/test_rcparams.py
+--- a/lib/matplotlib/tests/test_rcparams.py
++++ b/lib/matplotlib/tests/test_rcparams.py
+@@ -496,6 +496,13 @@ def test_keymaps():
+         assert isinstance(mpl.rcParams[k], list)
+ 
+ 
++def test_no_backend_reset_rccontext():
++    assert mpl.rcParams[&#x27;backend&#x27;] != &#x27;module://aardvark&#x27;
++    with mpl.rc_context():
++        mpl.rcParams[&#x27;backend&#x27;] = &#x27;module://aardvark&#x27;
++    assert mpl.rcParams[&#x27;backend&#x27;] == &#x27;module://aardvark&#x27;
++
++
+ def test_rcparams_reset_after_fail():
+     # There was previously a bug that meant that if rc_context failed and
+     # raised an exception due to issues in the supplied rc parameters, the
+</pre>
+</body></html>

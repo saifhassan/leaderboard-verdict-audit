@@ -1,0 +1,46 @@
+{
+ "reference": "verbatim copy of fantastic-bugs cf7f9a8 src/metrics.py functions",
+ "checks": [
+  {
+   "matrix": "lite_A_scorable",
+   "shape": [
+    84,
+    205
+   ],
+   "max_abs_difference": {
+    "scalability": 0.0,
+    "item_total": 0.0,
+    "tetrachoric": 1.1102230246251565e-16
+   },
+   "pass": true
+  },
+  {
+   "matrix": "lite_B_scorable",
+   "shape": [
+    84,
+    265
+   ],
+   "max_abs_difference": {
+    "scalability": 0.0,
+    "item_total": 0.0,
+    "tetrachoric": 1.1102230246251565e-16
+   },
+   "pass": true
+  },
+  {
+   "matrix": "synthetic_60x40",
+   "shape": [
+    60,
+    40
+   ],
+   "max_abs_difference": {
+    "scalability": 0.0,
+    "item_total": 0.0,
+    "tetrachoric": 5.551115123125783e-17
+   },
+   "pass": true
+  }
+ ],
+ "seconds_per_2000_resample_cell_test_split": 0.29,
+ "all_pass": true
+}

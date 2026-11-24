@@ -1,0 +1,37 @@
+MANUAL REVIEW - RATER B  (20 tasks, about 2 hours)
+==================================================
+Everything you need is in this folder. Work on your own computer. Any computer with a browser and Excel is enough.
+
+FILES
+  1_READ_packet.html     the 20 tasks (open in a browser)
+  2_FILL_answers.csv     your answers (open in Excel)
+  3_FILL_time_log.csv    when you worked (open in Excel)
+
+STEPS
+1. In 3_FILL_time_log.csv add a line: your name, the date, the clock time you start (for example 14:05).
+2. In 1_READ_packet.html, for each task read: the description, the reference fix, the grading tests.
+3. In 2_FILL_answers.csv, in the row with the same task number, fill:
+     Q1 description sufficient?    yes | partly | no
+        Does the description state the behaviour the tests check?
+        "no" = the tests require something the description does not say, or contradicts.
+     Q2 tests reject a valid fix?  yes | no
+        Would a correct fix written from the description alone fail these tests
+        (e.g. they demand one exact message, name or implementation)?
+     Q3 fix given in description?  yes | partly | no
+        "yes" = the description already contains the code change the reference fix makes.
+     Q4 difficulty if fair         easy | medium | hard
+        For an experienced developer new to the project. Leave empty if Q1 = no or Q2 = yes.
+     note                          a few words in your own words (e.g. "test needs exact key name"). Keep it short.
+   Type the answer words exactly as shown.
+4. When you stop, write the clock time you stopped and the task numbers done. Add a new line each time you resume.
+5. When all 20 rows are filled, save both CSV files (same names, CSV format).
+
+RULES
+- Judge from the packet. Open the pull-request link only if you need more context.
+- Do the reading and judging yourself. No AI assistant for reading, deciding or writing notes.
+- You have not seen these 20 tasks before. Do not ask the other rater about them and do not look at any other project file.
+- Do not change task numbers, task names, column names or file names.
+
+RETURN BY EMAIL to Saif Hassan
+- 2_FILL_answers.csv and 3_FILL_time_log.csv as attachments
+- One line: your full name, affiliation, and your experience with Python and projects such as Django or SymPy.
